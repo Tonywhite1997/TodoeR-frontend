@@ -3,6 +3,8 @@
 @import "./footer";
 @import "./contact";
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,300&display=swap');
+
 *{
     margin: 0px;
     padding: 0px;
@@ -20,7 +22,7 @@ button{
 
 body{
     height: 100vh;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 16px;
 }
 

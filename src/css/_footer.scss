@@ -1,0 +1,29 @@
+.footer{
+    background-color: #EBEBEB;
+    height: 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &--logo{
+        margin-left: 2em;
+        img{
+            width: 80px;
+        }
+    }
+
+    p{
+        font-size: .8rem;
+    }
+
+    &--icons{
+        margin-right: 2em;
+        display: flex;
+        gap: 1em;
+        color: rgb(103, 103, 255);
+
+        .fa-brands{
+            cursor: pointer;
+        }
+    }
+}

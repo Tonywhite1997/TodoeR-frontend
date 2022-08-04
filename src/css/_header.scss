@@ -1,0 +1,79 @@
+
+@mixin flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header{
+    height: 10%;
+    // border: 1px solid red;
+    background-color: #EBEBEB;
+    @include flex();
+
+    &--logo{
+        margin-left: 2em;
+
+        &__image{
+            width: 6rem;
+        }
+    }
+    &--right{
+        // border: 1px solid brown;
+        margin-right: 2em;
+        @include flex();
+        gap: 1em;
+
+        &__ul {
+            font-weight: 500;
+            font-size: 1.125rem;
+        
+            &__li {
+                list-style: none;
+                transition: all 500ms ease-in-out;
+    
+                &:hover {
+                    text-decoration: underline;
+                }
+    
+                &:active {
+                    background-color: black;
+                }
+            }
+        }
+        &__toggler {
+            width: 50px;
+            height: 25px;
+            position: relative;
+            background-color: white;
+            border: 2px solid black;
+            border-radius: 100vmax;
+            cursor: pointer;
+
+            &::after{
+                content: "";
+                height: 15px;
+                width: 15px;
+                border-radius: 100%;
+                position: absolute;
+                left: 5px;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: white;
+                border: 2px solid black;
+                transition: all 300ms ease-in-out;
+                
+            }
+        }
+
+        &__toggler.dark{
+            background-color: #06060a;
+
+            &::after{
+                left: 1.6em;
+                
+            }
+        }
+    }
+    
+}

@@ -1,0 +1,35 @@
+@import "./header";
+@import "./main";
+@import "./footer";
+@import "./contact";
+
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+button{
+    cursor: pointer;
+}
+
+.link{
+    text-decoration: none;
+    color: black;
+}
+
+body{
+    height: 100vh;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 16px;
+}
+
+.dark--mode{
+    background-color: #0d0c14;   //#060d06
+    color: white;
+}
+
+#root{
+    height: 100%;
+    width: 100%;
+}

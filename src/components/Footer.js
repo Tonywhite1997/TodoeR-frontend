@@ -12,7 +12,7 @@ function Footer() {
     >
       <Link to="/">
         <div className="footer--logo">
-          <img src="../images/logo.png" />
+          <img src="../images/logo.png" alt="web-logo" />
         </div>
       </Link>
       <p className="footer--copywright">copywright. All rights reserved.</p>

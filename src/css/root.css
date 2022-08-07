@@ -249,7 +249,39 @@
 }
 
 .main--right {
+  position: relative;
   width: 50%;
+  max-width: 100%;
+  overflow-y: scroll;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.main--right__date {
+  position: absolute;
+  top: .5em;
+  font-size: .8rem;
+  left: 1em;
+}
+
+.main--right::-webkit-scrollbar {
+  width: .8em;
+}
+
+.main--right::-webkit-scrollbar-track {
+  background: gray;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+          box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.main--right::-webkit-scrollbar-thumb {
+  background-color: #D9D9D9;
+  border-radius: 100vmax;
 }
 
 .main--right__sort {
@@ -262,6 +294,7 @@
           flex-direction: row;
   gap: .5em;
   margin-top: 2em;
+  margin-bottom: 1em;
   margin-right: 2em;
   -webkit-box-pack: end;
       -ms-flex-pack: end;
@@ -274,6 +307,70 @@
 .main--right__sort select {
   cursor: pointer;
   border-radius: 5px;
+}
+
+.main--right__task {
+  position: relative;
+  border-bottom: 1px solid #acacac;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  gap: .5em;
+  padding: .5em 1em;
+}
+
+.main--right__task__text {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  gap: 1em;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
+.main--right__task h4 {
+  font-weight: 500;
+  font-size: .9rem;
+}
+
+.main--right__task p {
+  font-size: .7rem;
+}
+
+.main--right__task input {
+  cursor: pointer;
+  margin-top: .4em;
+}
+
+.main--right__task__buttons {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  gap: 1em;
+  font-size: .8rem;
+  right: .5em;
+  top: .8em;
+}
+
+.main--right__task__buttons .fa-solid {
+  cursor: pointer;
 }
 
 @media screen and (max-width: 800px) {
@@ -315,11 +412,15 @@
   display: -ms-flexbox;
   display: flex;
   gap: 1em;
-  color: #6767ff;
+  color: #3737fd;
 }
 
 .footer--icons .fa-brands {
   cursor: pointer;
+}
+
+.footer--icons .fa-twitter {
+  color: #09baf5;
 }
 
 .contact--section {

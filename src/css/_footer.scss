@@ -20,10 +20,14 @@
         margin-right: 2em;
         display: flex;
         gap: 1em;
-        color: rgb(103, 103, 255);
+        color: rgb(55, 55, 253);
 
         .fa-brands{
             cursor: pointer;
+        }
+
+        .fa-twitter{
+            color: rgb(9, 186, 245);
         }
     }
 }

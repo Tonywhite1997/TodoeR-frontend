@@ -24,6 +24,8 @@ function reducer(state, action) {
       userTasks: state.userTasks.filter((task) => {
         return task.key !== action.payload;
       }),
+      isModal: true,
+      message: "Task Deleted.",
     };
   } else if (action.type === "EDIT_MODE") {
     return { ...state, editMode: true, editKey: action.payload };
@@ -41,6 +43,8 @@ function reducer(state, action) {
       }),
       editKey: "",
       editMode: false,
+      isModal: true,
+      message: "Task Edited.",
     };
   } else if (action.type === "LOAD_STORED_DATA") {
     return action.payload;
@@ -51,13 +55,15 @@ function reducer(state, action) {
         if (task.key === action.payload.key) {
           return {
             ...task,
-            isComplete: !task.isComplete,
+            isComplete: true,
             completedDate: action.payload.date,
           };
         } else {
           return task;
         }
       }),
+      isModal: true,
+      message: "Task completed.",
     };
   } else if (action.type === "REARRANGE_TASKS") {
     const { dragStartRef, dragEnterRef } = action.payload;
@@ -67,7 +73,11 @@ function reducer(state, action) {
     updatedTasks[dragEnterRef.current] = temp;
     return {
       ...state,
+      isModal: state.userTasks.length > 1 ? true : false,
+      message: "Task swapped.",
     };
+  } else if (action.type === "RESET_MODAL") {
+    return { ...state, isModal: false, message: "" };
   }
 }
 
@@ -86,6 +96,8 @@ function Home() {
     userTasks: [],
     editKey: "",
     editMode: false,
+    isModal: true,
+    message: "",
   });
 
   function handleOnChange(e) {
@@ -154,6 +166,12 @@ function Home() {
     });
   }
 
+  useEffect(() => {
+    window.addEventListener("load", () => {
+      dispatcher({ type: "SWITCH_BACK_FROM_EDIT_MODE" });
+    });
+  }, []);
+
   function toggleComplete(key) {
     dispatcher({ type: "TOGGLE_COMPLETE", payload: { key, date } });
   }
@@ -167,7 +185,17 @@ function Home() {
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+  });
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      dispatcher({ type: "RESET_MODAL" });
+    }, 3000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  });
 
   const dragStartRef = useRef();
   const dragEnterRef = useRef();
@@ -185,6 +213,32 @@ function Home() {
       type: "REARRANGE_TASKS",
       payload: { dragStartRef, dragEnterRef },
     });
+  }
+
+  const [sortArray, setSortArray] = useState([]);
+  const [isSorting, setIsSorting] = useState(false);
+
+  function handleSortValueChange(e) {
+    dispatcher({ type: "SWITCH_BACK_FROM_EDIT_MODE" });
+    setInput({ title: "", description: "" });
+    if (e.target.value === "completed") {
+      setIsSorting(true);
+      setSortArray(() => {
+        return tasks.userTasks.filter((task) => {
+          return task.isComplete;
+        });
+      });
+    } else if (e.target.value === "unCompleted") {
+      setIsSorting(true);
+      setSortArray(() => {
+        return tasks.userTasks.filter((task) => {
+          return !task.isComplete;
+        });
+      });
+    } else if (e.target.value === "default") {
+      setSortArray([]);
+      setIsSorting(false);
+    }
   }
 
   return (
@@ -212,11 +266,10 @@ function Home() {
           <div className="main--right__sort">
             <i className="fa-solid fa-sort"></i>
             <p>Sorted by</p>
-            <select>
+            <select onChange={handleSortValueChange}>
               <option>default</option>
               <option>completed</option>
               <option>unCompleted</option>
-              <option>date</option>
             </select>
           </div>
           <Task
@@ -232,6 +285,8 @@ function Home() {
             descriptionRef={descriptionRef}
             handleCancelButton={handleCancelButton}
             addTask={addTask}
+            sortArray={sortArray}
+            isSorting={isSorting}
           />
         </section>
       </main>

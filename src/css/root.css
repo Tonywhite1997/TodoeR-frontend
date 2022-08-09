@@ -309,6 +309,25 @@
   border-radius: 5px;
 }
 
+.main--right .modal__message {
+  color: red;
+  font-size: .8rem;
+  position: absolute;
+  top: 4.5em;
+  font-weight: 600;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+}
+
 .main--right__task {
   position: relative;
   border-bottom: 1px solid #acacac;
@@ -323,7 +342,8 @@
       -ms-flex-align: start;
           align-items: flex-start;
   gap: .5em;
-  padding: .5em 1em;
+  padding: 0 1em;
+  margin-top: 1em;
 }
 
 .main--right__task__text {
@@ -419,8 +439,8 @@
   cursor: pointer;
 }
 
-.footer--icons .fa-twitter {
-  color: #09baf5;
+.footer--icons .fa-github {
+  color: black;
 }
 
 .contact--section {

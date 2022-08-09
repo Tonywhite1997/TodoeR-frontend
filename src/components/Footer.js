@@ -17,8 +17,12 @@ function Footer() {
       </Link>
       <p className="footer--copywright">copywright. All rights reserved.</p>
       <div className="footer--icons">
-        <i className="fa-brands fa-facebook"></i>
-        <i className="fa-brands fa-twitter"></i>
+        <a href="https://web.facebook.com/?_rdc=1&_rdr">
+          <i className="fa-brands fa-facebook"></i>
+        </a>
+        <a href="https://github.com/Tonywhite1997">
+          <i className="fa-brands fa-github"></i>
+        </a>
       </div>
     </footer>
   );

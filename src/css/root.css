@@ -507,14 +507,14 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
 }
 
 .contact--section__div {
   position: absolute;
-  top: 1em;
+  top: 2em;
   padding: 2em 2em;
   background-color: #EBEBEB;
   border-radius: 10px;
@@ -574,13 +574,11 @@
 }
 
 .contact--section small {
-  position: absolute;
-  bottom: 4em;
+  margin-bottom: .5em;
 }
 
 .contact--section p {
-  position: absolute;
-  bottom: 1em;
+  margin-bottom: 2rem;
   font-size: 1.125rem;
 }
 

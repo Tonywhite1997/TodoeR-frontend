@@ -11,13 +11,13 @@
     padding-top: 2em;
     @include flex(column);
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
 
     &__div{
         // border: 1px solid red;
         position: absolute;
         // margin-bottom: 2em;
-        top: 1em;
+        top: 2em;
         padding: 2em 2em;
         background-color: #EBEBEB;
         border-radius: 10px;
@@ -62,14 +62,11 @@
         }
     }
         small {
-            position: absolute;
-            bottom: 4em;
-            // margin-bottom: .5em;
+            margin-bottom: .5em;
         }
 
         p{
-            position: absolute;
-            bottom: 1em;
+            margin-bottom: 2rem;
             font-size: 1.125rem;
         }
 }

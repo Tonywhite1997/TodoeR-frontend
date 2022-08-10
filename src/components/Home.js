@@ -11,75 +11,7 @@ import Footer from "./Footer";
 import Task from "./Task";
 import { DarkModeContext } from "./context";
 import TaskInputField from "./TaskInputField";
-
-function reducer(state, action) {
-  if (action.type === "ADD_TASK") {
-    return {
-      ...state,
-      userTasks: [...state.userTasks, action.payload],
-    };
-  } else if (action.type === "DELETE_TASK") {
-    return {
-      ...state,
-      userTasks: state.userTasks.filter((task) => {
-        return task.key !== action.payload;
-      }),
-      isModal: true,
-      message: "Task Deleted.",
-    };
-  } else if (action.type === "EDIT_MODE") {
-    return { ...state, editMode: true, editKey: action.payload };
-  } else if (action.type === "SWITCH_BACK_FROM_EDIT_MODE") {
-    return { ...state, editMode: false, editKey: "" };
-  } else if (action.type === "EDIT_TASK") {
-    return {
-      ...state,
-      userTasks: state.userTasks.map((task) => {
-        if (task.key === state.editKey) {
-          return { ...action.payload };
-        } else {
-          return task;
-        }
-      }),
-      editKey: "",
-      editMode: false,
-      isModal: true,
-      message: "Task Edited.",
-    };
-  } else if (action.type === "LOAD_STORED_DATA") {
-    return action.payload;
-  } else if (action.type === "TOGGLE_COMPLETE") {
-    return {
-      ...state,
-      userTasks: state.userTasks.map((task) => {
-        if (task.key === action.payload.key) {
-          return {
-            ...task,
-            isComplete: true,
-            completedDate: action.payload.date,
-          };
-        } else {
-          return task;
-        }
-      }),
-      isModal: true,
-      message: "Task completed.",
-    };
-  } else if (action.type === "REARRANGE_TASKS") {
-    const { dragStartRef, dragEnterRef } = action.payload;
-    const updatedTasks = state.userTasks;
-    const temp = updatedTasks[dragStartRef.current];
-    updatedTasks[dragStartRef.current] = updatedTasks[dragEnterRef.current];
-    updatedTasks[dragEnterRef.current] = temp;
-    return {
-      ...state,
-      isModal: state.userTasks.length > 1 ? true : false,
-      message: "Task swapped.",
-    };
-  } else if (action.type === "RESET_MODAL") {
-    return { ...state, isModal: false, message: "" };
-  }
-}
+import { reducer } from "./reducer";
 
 function Home() {
   const { isDark } = useContext(DarkModeContext);
@@ -96,9 +28,38 @@ function Home() {
     userTasks: [],
     editKey: "",
     editMode: false,
-    isModal: true,
+    isModal: false,
     message: "",
   });
+
+  const [screenSize, setScreenSize] = useState(window.innerWidth);
+  const [isNewTask, setIsNewTask] = useState(true);
+
+  function getScreenSize() {
+    setScreenSize(window.innerWidth);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", getScreenSize);
+
+    return () => {
+      window.removeEventListener("resize", getScreenSize);
+    };
+  }, [screenSize]);
+
+  useEffect(() => {
+    if (screenSize < 650) {
+      setIsNewTask(false);
+    } else {
+      setIsNewTask(true);
+    }
+  }, [screenSize]);
+
+  function openTaskInputField() {
+    if (screenSize <= 650) {
+      setIsNewTask(true);
+    }
+  }
 
   function handleOnChange(e) {
     const { name } = e.target;
@@ -118,6 +79,9 @@ function Home() {
   function addTask() {
     if (!tasks.editMode) {
       if (input.title && input.description) {
+        if (screenSize <= 650) {
+          setIsNewTask(false);
+        }
         dispatcher({
           type: "ADD_TASK",
           payload: {
@@ -132,6 +96,9 @@ function Home() {
       }
       return;
     } else {
+      if (screenSize <= 650) {
+        setIsNewTask(false);
+      }
       dispatcher({ type: "EDIT_TASK", payload: input });
       setInput((prevState) => {
         return { ...prevState, title: "", description: "" };
@@ -140,6 +107,9 @@ function Home() {
   }
 
   function handleCancelButton() {
+    if (screenSize <= 650) {
+      setIsNewTask(false);
+    }
     if (tasks.editMode) {
       dispatcher({ type: "SWITCH_BACK_FROM_EDIT_MODE" });
       setInput((prevState) => {
@@ -157,12 +127,15 @@ function Home() {
   }
 
   function startEditMode(key) {
-    descriptionRef.current.focus();
-    tasks.userTasks.find((task) => {
-      if (task.key === key) {
-        setInput({ ...task });
-      }
-      return dispatcher({ type: "EDIT_MODE", payload: key });
+    setIsNewTask(true);
+    setTimeout(() => {
+      descriptionRef.current.focus();
+      tasks.userTasks.find((task) => {
+        if (task.key === key) {
+          setInput({ ...task });
+        }
+        return dispatcher({ type: "EDIT_MODE", payload: key });
+      });
     });
   }
 
@@ -221,6 +194,7 @@ function Home() {
   function handleSortValueChange(e) {
     dispatcher({ type: "SWITCH_BACK_FROM_EDIT_MODE" });
     setInput({ title: "", description: "" });
+
     if (e.target.value === "completed") {
       setIsSorting(true);
       setSortArray(() => {
@@ -246,11 +220,11 @@ function Home() {
       <Header />
       <main className="main">
         <section className="main--left">
-          <div className="main--left__addBtn">
+          <div className="main--left__addBtn" onClick={openTaskInputField}>
             <p className={isDark ? "p--darkMode" : ""}>+</p>
             <h3>Add task</h3>
           </div>
-          {!tasks.editMode && (
+          {!tasks.editMode && isNewTask && (
             <TaskInputField
               input={input}
               handleOnChange={handleOnChange}
@@ -287,6 +261,7 @@ function Home() {
             addTask={addTask}
             sortArray={sortArray}
             isSorting={isSorting}
+            isNewTask={isNewTask}
           />
         </section>
       </main>

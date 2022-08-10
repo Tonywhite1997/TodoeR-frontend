@@ -4,15 +4,34 @@
     flex-direction: $direction;
 }
 
+body{
+    height: 100vh;
+    height: -webkit-fill-available;
+
+    .header, .footer{
+        height: 10%;
+    }
+
+    .footer{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+    }
+
+    .contact--section{
+        height: 80%;
+    }
+}
+
+
 .contact--section{
-    // border: 1px solid red;
-    height: 80vh;
+    margin-top: 1.7em;
     @include flex(column);
     align-items: center;
     justify-content: center;
 
     &__div{
-        // border: 1px solid red;
         margin-bottom: 2em;
         padding: 2em 2em;
         background-color: #EBEBEB;
@@ -22,7 +41,6 @@
 
 
         &__name, &__email{
-            // border: 1px solid green;
             @include flex(column);
             gap: .5em;
             margin-bottom: 1em;
@@ -65,4 +83,22 @@
         p{
             font-size: 1.125rem;
         }
+}
+
+@media screen and (max-width: 650px){
+    .contact--section{
+        &__div{
+            width: 350px;
+
+            &__name,&__email, &__textarea{
+                width: 330px;
+            }
+        }
+
+        p{
+            text-align: center;
+            font-size: 1em;
+            margin-bottom: 1em;
+        }
+    }
 }

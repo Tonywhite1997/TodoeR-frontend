@@ -78,3 +78,16 @@
     }
     
 }
+
+@media screen and (max-width: 650px){
+    .header{
+
+        &--logo{
+            margin-left: .5em;
+        }
+
+        &--right{
+            margin-right: .5em;
+        }
+    }
+}

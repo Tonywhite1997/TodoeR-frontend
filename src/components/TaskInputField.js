@@ -9,13 +9,17 @@ function TaskInputField({
   handleCancelButton,
   addTask,
   tasks,
+  inputFieldRef,
 }) {
   const { isDark } = useContext(DarkModeContext);
 
   return (
     <div
+      ref={inputFieldRef}
       className="main--left--task__div"
-      style={{ paddingLeft: tasks.editMode ? "1em" : "0" }}
+      style={{
+        paddingLeft: tasks.editMode ? "1em" : "0",
+      }}
     >
       <div
         className={

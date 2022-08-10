@@ -31,3 +31,16 @@
         }
     }
 }
+
+@media screen and (max-width: 650px){
+    .footer{
+
+        &--logo{
+            margin-left: .5em;
+        }
+
+        &--icons{
+            margin-right: .5em;
+        }
+    }
+}

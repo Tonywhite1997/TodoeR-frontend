@@ -89,6 +89,15 @@
   left: 1.6em;
 }
 
+@media screen and (max-width: 650px) {
+  .header--logo {
+    margin-left: .5em;
+  }
+  .header--right {
+    margin-right: .5em;
+  }
+}
+
 .main {
   height: 80%;
   display: -webkit-box;
@@ -153,6 +162,7 @@
 .main--left--task__div {
   padding: 1em 0;
   padding-right: 1em;
+  margin-right: 1em;
 }
 
 .main--left--task__div__textfield {
@@ -161,7 +171,7 @@
   padding: 1em .5em;
   margin-bottom: 1em;
   height: 150px;
-  width: 50%;
+  width: 90%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -206,7 +216,7 @@
 }
 
 .main--left--task__div__button {
-  width: 50%;
+  width: 90%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -266,6 +276,7 @@
   position: absolute;
   top: .5em;
   font-size: .8rem;
+  font-weight: bold;
   left: 1em;
 }
 
@@ -344,6 +355,7 @@
   gap: .5em;
   padding: 0 1em;
   margin-top: 1em;
+  padding-bottom: .5em;
 }
 
 .main--right__task__text {
@@ -400,6 +412,33 @@
   }
 }
 
+@media screen and (max-width: 650px) {
+  .main {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .main--right, .main--left {
+    width: 100%;
+  }
+  .main--left {
+    padding-left: .5em;
+  }
+  .main--left--task__div {
+    margin: 0;
+  }
+  .main--right__sort {
+    margin-right: .5em;
+  }
+  .main--right__task {
+    padding-left: .5em;
+  }
+  .main--right__date {
+    left: .5em;
+  }
+}
+
 .footer {
   background-color: #EBEBEB;
   height: 10%;
@@ -443,8 +482,37 @@
   color: black;
 }
 
+@media screen and (max-width: 650px) {
+  .footer--logo {
+    margin-left: .5em;
+  }
+  .footer--icons {
+    margin-right: .5em;
+  }
+}
+
+body {
+  height: 100vh;
+  height: -webkit-fill-available;
+}
+
+body .header, body .footer {
+  height: 10%;
+}
+
+body .footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+body .contact--section {
+  height: 80%;
+}
+
 .contact--section {
-  height: 80vh;
+  margin-top: 1.7em;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -526,6 +594,20 @@
 
 .contact--section p {
   font-size: 1.125rem;
+}
+
+@media screen and (max-width: 650px) {
+  .contact--section__div {
+    width: 350px;
+  }
+  .contact--section__div__name, .contact--section__div__email, .contact--section__div__textarea {
+    width: 330px;
+  }
+  .contact--section p {
+    text-align: center;
+    font-size: 1em;
+    margin-bottom: 1em;
+  }
 }
 
 * {

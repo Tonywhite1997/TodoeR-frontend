@@ -4,12 +4,10 @@
 }
 
 .main{
-//    border: 1px solid red;
    height: 80%; 
    @include flex(row);
 
    &--left{
-    // border: 1px solid red;
     padding-left: 2em;
     width: 50%;
     box-shadow: 2px 0 2px 2px rgb(222, 222, 222);
@@ -21,7 +19,6 @@
         margin-top: 2em;
         margin-bottom: 1em;
         cursor: pointer;
-        // border: 1px solid green;
         width: 120px;
 
         p{
@@ -42,6 +39,7 @@
         // border: 1px solid red;
         padding: 1em 0;
         padding-right: 1em;
+        margin-right: 1em;
 
         &__textfield{
             border: 2px solid black;
@@ -49,7 +47,7 @@
             padding: 1em .5em;
             margin-bottom: 1em;
             height: 150px;
-            width: 50%;
+            width: 90%;
             @include flex(column);
             gap: 1em;
 
@@ -65,7 +63,6 @@
                 height: 100px;
                 overflow-y: scroll;
                 cursor: pointer;
-                // border: 1px solid red;
 
             &::-webkit-scrollbar {
                     width: .5em;
@@ -88,8 +85,7 @@
         }
 
         &__button{
-            // border: 1px solid green;
-            width: 50%;
+            width: 90%;
             @include flex(row);
             gap: .5em;
             justify-content: flex-end;
@@ -134,6 +130,7 @@
         position: absolute;
         top: .5em;
         font-size: .8rem;
+        font-weight: bold;
         left: 1em;
        }
 
@@ -152,7 +149,6 @@
         }
 
        &__sort{
-        // border: 1px solid red;
         @include flex(row);
         gap: .5em;
         margin-top: 2em;
@@ -186,14 +182,13 @@
           align-items: flex-start;
           gap: .5em;
           padding: 0 1em;
-        //   border: 1px solid red;
           margin-top: 1em;
+          padding-bottom: .5em;
 
           &__text{
             @include flex(row);
             gap: 1em;
             align-items: flex-start;
-            // border: 1px solid red;
           }
 
           h4{
@@ -228,8 +223,43 @@
 }
 
 @media screen and (max-width: 800px){
+    .main--left--task__div{
+        // border: 1px solid red;
+    }
     .main--left--task__div__button,
     .main--left--task__div__textfield{
         width: 100%;
     }
+}
+
+@media screen and (max-width: 650px){
+    .main {
+            flex-direction: column;
+
+            &--right, &--left{
+                width: 100%;
+            }
+
+            &--left{
+                padding-left: .5em;
+                &--task__div{
+                    margin: 0;
+                }
+            
+            }
+            &--right{
+
+                &__sort{
+                    margin-right: .5em;
+                }
+
+                &__task{
+                    padding-left: .5em;
+                }
+
+                &__date{
+                    left: .5em;
+                }
+            }
+        }
 }

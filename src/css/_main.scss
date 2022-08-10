@@ -120,9 +120,9 @@
     }
 }
 &--right {
+    // border: 1px solid red;
        position: relative;
        width: 50%;
-       max-width: 100%;
        overflow-y: scroll;
        @include flex(column);
 

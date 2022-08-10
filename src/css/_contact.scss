@@ -4,29 +4,10 @@
     flex-direction: $direction;
 }
 
-body{
-    height: 100vh;
-    height: -webkit-fill-available;
-
-    .header, .footer{
-        height: 10%;
-    }
-
-    .footer{
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        left: 0;
-    }
-
-    .contact--section{
-        height: 80%;
-    }
-}
-
-
 .contact--section{
-    margin-top: 1.7em;
+    // border: 1px solid red;
+    height: 80vh;
+    padding-top: 2em;
     @include flex(column);
     align-items: center;
     justify-content: center;

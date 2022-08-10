@@ -6,6 +6,7 @@
 
 .contact--section{
     // border: 1px solid red;
+    position: relative;
     height: 80vh;
     padding-top: 2em;
     @include flex(column);
@@ -13,7 +14,10 @@
     justify-content: center;
 
     &__div{
-        margin-bottom: 2em;
+        // border: 1px solid red;
+        position: absolute;
+        // margin-bottom: 2em;
+        top: 1em;
         padding: 2em 2em;
         background-color: #EBEBEB;
         border-radius: 10px;
@@ -58,10 +62,14 @@
         }
     }
         small {
-            margin-bottom: .5em;
+            position: absolute;
+            bottom: 4em;
+            // margin-bottom: .5em;
         }
 
         p{
+            position: absolute;
+            bottom: 1em;
             font-size: 1.125rem;
         }
 }

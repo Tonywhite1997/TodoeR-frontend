@@ -494,6 +494,7 @@
 }
 
 .contact--section {
+  position: relative;
   height: 80vh;
   padding-top: 2em;
   display: -webkit-box;
@@ -512,7 +513,8 @@
 }
 
 .contact--section__div {
-  margin-bottom: 2em;
+  position: absolute;
+  top: 1em;
   padding: 2em 2em;
   background-color: #EBEBEB;
   border-radius: 10px;
@@ -572,10 +574,13 @@
 }
 
 .contact--section small {
-  margin-bottom: .5em;
+  position: absolute;
+  bottom: 4em;
 }
 
 .contact--section p {
+  position: absolute;
+  bottom: 1em;
   font-size: 1.125rem;
 }
 

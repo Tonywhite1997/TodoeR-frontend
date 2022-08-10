@@ -128,8 +128,8 @@ function Home() {
 
   function startEditMode(key) {
     setIsNewTask(true);
+
     setTimeout(() => {
-      descriptionRef.current.focus();
       tasks.userTasks.find((task) => {
         if (task.key === key) {
           setInput({ ...task });
@@ -137,6 +137,9 @@ function Home() {
         return dispatcher({ type: "EDIT_MODE", payload: key });
       });
     });
+    setTimeout(() => {
+      descriptionRef.current.focus();
+    }, 50);
   }
 
   useEffect(() => {

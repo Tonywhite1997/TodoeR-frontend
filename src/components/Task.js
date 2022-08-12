@@ -49,7 +49,7 @@ function Task({
             >
               <p>
                 {task.isComplete
-                  ? `Completed: ${task.completedDate}`
+                  ? `Created: ${task.createdDate} - Completed: ${task.completedDate}`
                   : `Created: ${task.createdDate}`}
               </p>
               <div className="main--right__task__text">
@@ -115,7 +115,7 @@ function Task({
             >
               <p>
                 {task.isComplete
-                  ? `Completed: ${task.completedDate}`
+                  ? `Created: ${task.createdDate} - Completed: ${task.completedDate}`
                   : `Created: ${task.createdDate}`}
               </p>
               <div className="main--right__task__text">

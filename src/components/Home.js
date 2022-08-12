@@ -225,7 +225,7 @@ function Home() {
         <section className="main--left">
           <div className="main--left__addBtn" onClick={openTaskInputField}>
             <p className={isDark ? "p--darkMode" : ""}>+</p>
-            <h3>Add task</h3>
+            <h3>Add New Task</h3>
           </div>
           {!tasks.editMode && isNewTask && (
             <TaskInputField

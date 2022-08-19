@@ -3,6 +3,8 @@ export function reducer(state, action) {
     return {
       ...state,
       userTasks: [...state.userTasks, action.payload],
+      isModal: true,
+      message: "Task Added.",
     };
   } else if (action.type === "DELETE_TASK") {
     return {

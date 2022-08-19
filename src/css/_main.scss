@@ -5,12 +5,22 @@
 
 .main{
    height: 80%; 
+   position: relative;
    @include flex(row);
 
    &--left{
+    position: relative;
     padding-left: 2em;
     width: 50%;
     box-shadow: 2px 0 2px 2px rgb(222, 222, 222);
+
+    &__date {
+        position: absolute;
+        top: .5em;
+        font-size: .8rem;
+        font-weight: bold;
+        left: 2.4em;
+    }
 
     &__addBtn{
         @include flex(row);
@@ -126,14 +136,6 @@
        overflow-y: scroll;
        @include flex(column);
 
-       &__date{
-        position: absolute;
-        top: .5em;
-        font-size: .8rem;
-        font-weight: bold;
-        left: 1em;
-       }
-
     &::-webkit-scrollbar {
             width: .8em;
         }
@@ -162,17 +164,6 @@
             border-radius: 5px;
         }
 
-       }
-
-       .modal__message{
-        color: red;
-        font-size: .8rem;
-        position: absolute;
-        top: 4.5em;
-        font-weight: 600;
-        @include flex(row);
-        justify-content: center;
-        width: 100%;
        }
 
        &__task {
@@ -218,6 +209,20 @@
           }
        }
        
+   }
+   .modal__message {
+    text-align: center;
+       font-size: .8rem;
+       width: 300px;
+       position: absolute;
+       left: 50%;
+       transform: translateX(-50%);
+       bottom: 0;
+       padding: .5em 1em;
+       font-weight: 600;
+       @include flex(row);
+       justify-content: center;
+       gap: 1em
    }
    
 }

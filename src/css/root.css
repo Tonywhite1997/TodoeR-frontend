@@ -100,6 +100,7 @@
 
 .main {
   height: 80%;
+  position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -110,10 +111,19 @@
 }
 
 .main--left {
+  position: relative;
   padding-left: 2em;
   width: 50%;
   -webkit-box-shadow: 2px 0 2px 2px #dedede;
           box-shadow: 2px 0 2px 2px #dedede;
+}
+
+.main--left__date {
+  position: absolute;
+  top: .5em;
+  font-size: .8rem;
+  font-weight: bold;
+  left: 2.4em;
 }
 
 .main--left__addBtn {
@@ -271,14 +281,6 @@
           flex-direction: column;
 }
 
-.main--right__date {
-  position: absolute;
-  top: .5em;
-  font-size: .8rem;
-  font-weight: bold;
-  left: 1em;
-}
-
 .main--right::-webkit-scrollbar {
   width: .8em;
 }
@@ -317,25 +319,6 @@
 .main--right__sort select {
   cursor: pointer;
   border-radius: 5px;
-}
-
-.main--right .modal__message {
-  color: red;
-  font-size: .8rem;
-  position: absolute;
-  top: 4.5em;
-  font-weight: 600;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  width: 100%;
 }
 
 .main--right__task {
@@ -402,6 +385,30 @@
 
 .main--right__task__buttons .fa-solid {
   cursor: pointer;
+}
+
+.main .modal__message {
+  text-align: center;
+  font-size: .8rem;
+  width: 300px;
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  bottom: 0;
+  padding: .5em 1em;
+  font-weight: 600;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  gap: 1em;
 }
 
 @media screen and (max-width: 800px) {

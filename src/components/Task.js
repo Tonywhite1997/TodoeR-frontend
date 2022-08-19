@@ -34,8 +34,6 @@ function Task({
         />
       )}
 
-      <p className="modal__message">{tasks.isModal && tasks.message}</p>
-
       {!isSorting &&
         userTasks.map((task, index) => {
           return (

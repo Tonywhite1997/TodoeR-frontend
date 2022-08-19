@@ -127,6 +127,7 @@ function Home() {
   }
 
   function startEditMode(key) {
+    console.log(tasks.editMode);
     setIsNewTask(true);
 
     setTimeout(() => {
@@ -141,12 +142,6 @@ function Home() {
       descriptionRef.current.focus();
     }, 50);
   }
-
-  useEffect(() => {
-    window.addEventListener("load", () => {
-      dispatcher({ type: "SWITCH_BACK_FROM_EDIT_MODE" });
-    });
-  }, []);
 
   function toggleComplete(key) {
     dispatcher({ type: "TOGGLE_COMPLETE", payload: { key, date } });
@@ -172,6 +167,10 @@ function Home() {
       clearTimeout(timer);
     };
   });
+
+  useEffect(() => {
+    dispatcher({ type: "SWITCH_BACK_FROM_EDIT_MODE" });
+  }, []);
 
   const dragStartRef = useRef();
   const dragEnterRef = useRef();
@@ -223,6 +222,7 @@ function Home() {
       <Header />
       <main className="main">
         <section className="main--left">
+          <p className="main--left__date">Today: {date}</p>
           <div className="main--left__addBtn" onClick={openTaskInputField}>
             <p className={isDark ? "p--darkMode" : ""}>+</p>
             <h3>Add New Task</h3>
@@ -239,7 +239,6 @@ function Home() {
           )}
         </section>
         <section className="main--right">
-          <p className="main--right__date">Today: {date}</p>
           <div className="main--right__sort">
             <i className="fa-solid fa-sort"></i>
             <p>Sorted by</p>
@@ -267,6 +266,20 @@ function Home() {
             isNewTask={isNewTask}
           />
         </section>
+        {tasks.isModal && (
+          <p
+            style={{
+              backgroundColor: isDark ? "white" : "#281732",
+              color: isDark ? "green" : "white",
+            }}
+            className="modal__message"
+          >
+            {tasks.message}
+            <span>
+              <i className="fa-solid fa-circle-check"></i>
+            </span>
+          </p>
+        )}
       </main>
       <Footer />
     </>

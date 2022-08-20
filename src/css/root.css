@@ -434,14 +434,14 @@
   .main--left--task__div {
     margin: 0;
   }
+  .main--left__date {
+    left: .5em;
+  }
   .main--right__sort {
     margin-right: .5em;
   }
   .main--right__task {
     padding-left: .5em;
-  }
-  .main--right__date {
-    left: .5em;
   }
 }
 

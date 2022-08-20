@@ -250,6 +250,11 @@
                 &--task__div{
                     margin: 0;
                 }
+
+            &__date {
+                left: .5em;
+            }
+
             
             }
             &--right{
@@ -262,9 +267,7 @@
                     padding-left: .5em;
                 }
 
-                &__date{
-                    left: .5em;
-                }
+                
             }
         }
 }

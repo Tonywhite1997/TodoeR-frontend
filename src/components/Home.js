@@ -76,6 +76,9 @@ function Home() {
   let year = new Date().getFullYear();
   let date = `${day}/${month}/${year}`;
 
+  const [sortArray, setSortArray] = useState([]);
+  const [isSorting, setIsSorting] = useState(false);
+
   function addTask() {
     if (!tasks.editMode) {
       if (input.title && input.description) {
@@ -100,6 +103,17 @@ function Home() {
         setIsNewTask(false);
       }
       dispatcher({ type: "EDIT_TASK", payload: input });
+      setSortArray((prevTasks) => {
+        return prevTasks.map((task) => {
+          if (task.key === tasks.editKey) {
+            return {
+              ...task,
+              ...input,
+            };
+          }
+          return task;
+        });
+      });
       setInput((prevState) => {
         return { ...prevState, title: "", description: "" };
       });
@@ -124,10 +138,16 @@ function Home() {
 
   function deleteTask(key) {
     dispatcher({ type: "DELETE_TASK", payload: key });
+    if (isSorting) {
+      setSortArray((prevArray) => {
+        return prevArray.filter((task) => {
+          return task.key !== key;
+        });
+      });
+    }
   }
 
   function startEditMode(key) {
-    console.log(tasks.editMode);
     setIsNewTask(true);
 
     setTimeout(() => {
@@ -144,6 +164,18 @@ function Home() {
   }
 
   function toggleComplete(key) {
+    setSortArray((prevTask) => {
+      return prevTask.map((task) => {
+        if (task.key === key) {
+          return {
+            ...task,
+            isComplete: true,
+            completedDate: date,
+          };
+        }
+        return task;
+      });
+    });
     dispatcher({ type: "TOGGLE_COMPLETE", payload: { key, date } });
   }
 
@@ -184,14 +216,13 @@ function Home() {
   }
 
   function onDragEnd() {
-    dispatcher({
-      type: "REARRANGE_TASKS",
-      payload: { dragStartRef, dragEnterRef },
-    });
+    if (!isSorting) {
+      dispatcher({
+        type: "REARRANGE_TASKS",
+        payload: { dragStartRef, dragEnterRef },
+      });
+    }
   }
-
-  const [sortArray, setSortArray] = useState([]);
-  const [isSorting, setIsSorting] = useState(false);
 
   function handleSortValueChange(e) {
     dispatcher({ type: "SWITCH_BACK_FROM_EDIT_MODE" });

@@ -1,0 +1,40 @@
+.welcome{
+    text-align: center;
+    margin-top: 6rem;
+    font-size: 1.25rem;
+}
+.form{
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 2rem;
+    // justify-content: center;
+    gap: 1.5em;
+
+    input{
+        height: 2.5rem;
+        width: 20rem;
+        border-radius: .5em;
+        text-indent: 1em;
+        font-size: 1.125rem;
+    }
+
+    button{
+        width: 20rem;
+        height: 2.5rem;
+        border-radius: 100vmax;
+        font-size: 1.125rem;
+        font-weight: 600;
+        transition: all 300ms ease-in;
+
+        &:hover{
+            background-color: #0d0c14;
+            color: white;
+        }
+    }
+
+    .signupBtn{
+        color: white;
+    }
+}

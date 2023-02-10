@@ -1,6 +1,4 @@
 import React from "react";
-import Header from "./Header";
-import Footer from "./Footer";
 import { useContext } from "react";
 import { DarkModeContext } from "./context";
 
@@ -8,7 +6,6 @@ function Contact() {
   const { isDark } = useContext(DarkModeContext);
   return (
     <>
-      <Header />
       <main className="contact">
         <section className="contact--section">
           <div
@@ -36,7 +33,6 @@ function Contact() {
           <p>Send me a message at tonywhite814.tw@gmail.com</p>
         </section>
       </main>
-      <Footer />
     </>
   );
 }

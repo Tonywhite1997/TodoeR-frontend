@@ -5,24 +5,29 @@ import React, {
   useRef,
   useEffect,
 } from "react";
-import { nanoid } from "nanoid";
-import Header from "./Header";
-import Footer from "./Footer";
+import { useNavigate } from "react-router-dom";
 import Task from "./Task";
-import { DarkModeContext } from "./context";
+import {
+  DarkModeContext,
+  successContext,
+  MessageContext,
+  modalContext,
+} from "./context";
 import TaskInputField from "./TaskInputField";
 import { reducer } from "./reducer";
+import axios from "axios";
 
 function Home() {
   const { isDark } = useContext(DarkModeContext);
+  const { success, setSuccess } = useContext(successContext);
+  const { modal, setModal } = useContext(modalContext);
+  // const {setMessage} = useContext(MessageContext)
   const [input, setInput] = useState({
     title: "",
     description: "",
-    createdDate: "",
-    completedDate: "",
-    isComplete: false,
-    key: "",
   });
+
+  const navigate = useNavigate();
 
   const [tasks, dispatcher] = useReducer(reducer, {
     userTasks: [],
@@ -34,6 +39,7 @@ function Home() {
 
   const [screenSize, setScreenSize] = useState(window.innerWidth);
   const [isNewTask, setIsNewTask] = useState(true);
+  const [userTasks, setUserTasks] = useState([]);
 
   function getScreenSize() {
     setScreenSize(window.innerWidth);
@@ -79,44 +85,66 @@ function Home() {
   const [sortArray, setSortArray] = useState([]);
   const [isSorting, setIsSorting] = useState(false);
 
-  function addTask() {
-    if (!tasks.editMode) {
-      if (input.title && input.description) {
-        if (screenSize <= 650) {
-          setIsNewTask(false);
-        }
-        dispatcher({
-          type: "ADD_TASK",
-          payload: {
-            ...input,
-            key: nanoid(),
-            createdDate: date,
+  // function addTask() {
+  //   if (!tasks.editMode) {
+  //     if (input.title && input.description) {
+  //       if (screenSize <= 650) {
+  //         setIsNewTask(false);
+  //       }
+  //       dispatcher({
+  //         type: "ADD_TASK",
+  //         payload: {
+  //           ...input,
+  //         },
+  //       });
+  //       setInput((prevState) => {
+  //         return { ...prevState, title: "", description: "" };
+  //       });
+  //     }
+  //     return;
+  //   } else {
+  //     if (screenSize <= 650) {
+  //       setIsNewTask(false);
+  //     }
+  //     dispatcher({ type: "EDIT_TASK", payload: input });
+  //     setSortArray((prevTasks) => {
+  //       return prevTasks.map((task) => {
+  //         if (task.key === tasks.editKey) {
+  //           return {
+  //             ...task,
+  //             ...input,
+  //           };
+  //         }
+  //         return task;
+  //       });
+  //     });
+  //     setInput((prevState) => {
+  //       return { ...prevState, title: "", description: "" };
+  //     });
+  //   }
+  // }
+
+  async function addTask(e) {
+    e.preventDefault();
+    try {
+      await axios.post(
+        "/api/v1/tasks",
+        { title: input.title, description: input.description },
+        {
+          withCredentials: true,
+          "Content-Type": "application/json",
+          headers: {
+            Authorization: "Bearer wlkhrjgtesjhdgiekjrbdgnkejrdsbgnkjmrwdsj",
           },
-        });
-        setInput((prevState) => {
-          return { ...prevState, title: "", description: "" };
-        });
+        }
+      );
+      alert("saved successfully");
+    } catch (err) {
+      setModal(true);
+      if (err.response.data.message === "jwt malformed") {
+        setSuccess(false);
+        // setMessage("Please login to continue");
       }
-      return;
-    } else {
-      if (screenSize <= 650) {
-        setIsNewTask(false);
-      }
-      dispatcher({ type: "EDIT_TASK", payload: input });
-      setSortArray((prevTasks) => {
-        return prevTasks.map((task) => {
-          if (task.key === tasks.editKey) {
-            return {
-              ...task,
-              ...input,
-            };
-          }
-          return task;
-        });
-      });
-      setInput((prevState) => {
-        return { ...prevState, title: "", description: "" };
-      });
     }
   }
 
@@ -250,69 +278,71 @@ function Home() {
 
   return (
     <>
-      <Header />
-      <main className="main">
-        <section className="main--left">
-          <p className="main--left__date">Today: {date}</p>
-          <div className="main--left__addBtn" onClick={openTaskInputField}>
-            <p className={isDark ? "p--darkMode" : ""}>+</p>
-            <h3>Add New Task</h3>
-          </div>
-          {!tasks.editMode && isNewTask && (
-            <TaskInputField
+      {success ? (
+        <main className="main">
+          <section className="main--left">
+            <p className="main--left__date">Today: {date}</p>
+            <div className="main--left__addBtn" onClick={openTaskInputField}>
+              <p className={isDark ? "p--darkMode" : ""}>+</p>
+              <h3>Add New Task</h3>
+            </div>
+            {!tasks.editMode && isNewTask && (
+              <TaskInputField
+                input={input}
+                handleOnChange={handleOnChange}
+                descriptionRef={descriptionRef}
+                handleCancelButton={handleCancelButton}
+                addTask={addTask}
+                tasks={tasks}
+              />
+            )}
+          </section>
+          <section className="main--right">
+            <div className="main--right__sort">
+              <i className="fa-solid fa-sort"></i>
+              <p>Sorted by</p>
+              <select onChange={handleSortValueChange}>
+                <option>default</option>
+                <option>completed</option>
+                <option>unCompleted</option>
+              </select>
+            </div>
+            <Task
+              tasks={tasks}
+              deleteTask={deleteTask}
+              startEditMode={startEditMode}
+              toggleComplete={toggleComplete}
+              onDragStart={onDragStart}
+              onDragEnter={onDragEnter}
+              onDragEnd={onDragEnd}
               input={input}
               handleOnChange={handleOnChange}
               descriptionRef={descriptionRef}
               handleCancelButton={handleCancelButton}
               addTask={addTask}
-              tasks={tasks}
+              sortArray={sortArray}
+              isSorting={isSorting}
+              isNewTask={isNewTask}
             />
+          </section>
+          {tasks.isModal && (
+            <p
+              style={{
+                backgroundColor: isDark ? "white" : "#281732",
+                color: isDark ? "green" : "white",
+              }}
+              className="modal__message"
+            >
+              {tasks.message}
+              <span>
+                <i className="fa-solid fa-circle-check"></i>
+              </span>
+            </p>
           )}
-        </section>
-        <section className="main--right">
-          <div className="main--right__sort">
-            <i className="fa-solid fa-sort"></i>
-            <p>Sorted by</p>
-            <select onChange={handleSortValueChange}>
-              <option>default</option>
-              <option>completed</option>
-              <option>unCompleted</option>
-            </select>
-          </div>
-          <Task
-            tasks={tasks}
-            deleteTask={deleteTask}
-            startEditMode={startEditMode}
-            toggleComplete={toggleComplete}
-            onDragStart={onDragStart}
-            onDragEnter={onDragEnter}
-            onDragEnd={onDragEnd}
-            input={input}
-            handleOnChange={handleOnChange}
-            descriptionRef={descriptionRef}
-            handleCancelButton={handleCancelButton}
-            addTask={addTask}
-            sortArray={sortArray}
-            isSorting={isSorting}
-            isNewTask={isNewTask}
-          />
-        </section>
-        {tasks.isModal && (
-          <p
-            style={{
-              backgroundColor: isDark ? "white" : "#281732",
-              color: isDark ? "green" : "white",
-            }}
-            className="modal__message"
-          >
-            {tasks.message}
-            <span>
-              <i className="fa-solid fa-circle-check"></i>
-            </span>
-          </p>
-        )}
-      </main>
-      <Footer />
+        </main>
+      ) : (
+        navigate("/", { replace: true })
+      )}
     </>
   );
 }

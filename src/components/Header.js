@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useEffect, useContext } from "react";
-import { DarkModeContext } from "./context";
+import { DarkModeContext, successContext } from "./context";
 
 function Header() {
   const { isDark, setIsDark } = useContext(DarkModeContext);
+  const { success, setSuccess } = useContext(successContext);
 
   function handleDarkMode() {
     setIsDark((prevState) => !prevState);
@@ -21,7 +22,7 @@ function Header() {
   }, [isDark]);
   return (
     <header className="header">
-      <Link className="link" to="/">
+      <Link className="link" to="/Home">
         <div className="header--logo">
           <img
             className="header--logo__image"
@@ -35,6 +36,13 @@ function Header() {
           <Link className="link" to="/Contact">
             <li className="header--right__ul__li">Contact</li>
           </Link>
+          {success ? (
+            <button>logout</button>
+          ) : (
+            <Link className="link" to="/">
+              <li className="header--right__ul__li">login</li>
+            </Link>
+          )}
         </ul>
         <div
           onClick={handleDarkMode}

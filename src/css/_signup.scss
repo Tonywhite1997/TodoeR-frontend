@@ -1,0 +1,39 @@
+.signup-p{
+    text-align: center;
+    margin-top: 5rem;
+    font-size: 1.25rem;
+}
+.signup-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+    gap: 1.25rem;
+    padding-block: 1em;
+
+    input {
+            height: 2.5rem;
+            width: 20rem;
+            border-radius: .5em;
+            text-indent: 1em;
+            font-size: 1.125rem;
+        }
+    
+        button {
+            width: 20rem;
+            height: 2.5rem;
+            border-radius: 100vmax;
+            font-size: 1.125rem;
+            font-weight: 600;
+            transition: all 300ms ease-in;
+    
+            &:hover {
+                background-color: #0d0c14;
+                color: white;
+            }
+        }
+
+        .signup-link {
+            color: white;
+        }
+}

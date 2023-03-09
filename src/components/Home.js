@@ -1,45 +1,56 @@
 import React, {
   useContext,
   useState,
-  useReducer,
   useRef,
   useEffect,
+  useCallback,
 } from "react";
-import { useNavigate } from "react-router-dom";
 import Task from "./Task";
 import {
   DarkModeContext,
   successContext,
-  MessageContext,
   modalContext,
+  userContext,
+  loadingContext,
 } from "./context";
 import TaskInputField from "./TaskInputField";
-import { reducer } from "./reducer";
 import axios from "axios";
 
 function Home() {
   const { isDark } = useContext(DarkModeContext);
   const { success, setSuccess } = useContext(successContext);
-  const { modal, setModal } = useContext(modalContext);
-  // const {setMessage} = useContext(MessageContext)
+  const { user } = useContext(userContext);
+  const { setModal } = useContext(modalContext);
+  const { isLoading } = useContext(loadingContext);
+
   const [input, setInput] = useState({
     title: "",
     description: "",
+    taskId: "",
   });
+  const [tasks, setTasks] = useState([]);
+  const [filteredTasks, setFilteredTasks] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [sortedBy, setSortedBy] = useState("all");
+  const sortRef = useRef();
 
-  const navigate = useNavigate();
+  const loadTasks = useCallback(async () => {
+    try {
+      const { data } = await axios.get(`/api/v1/tasks?user=${user.user._id}`);
+      setTasks(data.data.tasks);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [user]);
 
-  const [tasks, dispatcher] = useReducer(reducer, {
-    userTasks: [],
-    editKey: "",
-    editMode: false,
-    isModal: false,
-    message: "",
-  });
+  useEffect(() => {
+    if (user?.user?._id) {
+      loadTasks();
+    }
+  }, [user, loadTasks]);
 
   const [screenSize, setScreenSize] = useState(window.innerWidth);
   const [isNewTask, setIsNewTask] = useState(true);
-  const [userTasks, setUserTasks] = useState([]);
 
   function getScreenSize() {
     setScreenSize(window.innerWidth);
@@ -75,70 +86,43 @@ function Home() {
     });
   }
 
-  const descriptionRef = useRef();
+  // const descriptionRef = useRef();
 
   let day = new Date().getDate();
   let month = new Date().getMonth();
   let year = new Date().getFullYear();
-  let date = `${day}/${month}/${year}`;
+  let date = `${day}/${month + 1}/${year}`;
 
-  const [sortArray, setSortArray] = useState([]);
-  const [isSorting, setIsSorting] = useState(false);
-
-  // function addTask() {
-  //   if (!tasks.editMode) {
-  //     if (input.title && input.description) {
-  //       if (screenSize <= 650) {
-  //         setIsNewTask(false);
-  //       }
-  //       dispatcher({
-  //         type: "ADD_TASK",
-  //         payload: {
-  //           ...input,
-  //         },
-  //       });
-  //       setInput((prevState) => {
-  //         return { ...prevState, title: "", description: "" };
-  //       });
-  //     }
-  //     return;
-  //   } else {
-  //     if (screenSize <= 650) {
-  //       setIsNewTask(false);
-  //     }
-  //     dispatcher({ type: "EDIT_TASK", payload: input });
-  //     setSortArray((prevTasks) => {
-  //       return prevTasks.map((task) => {
-  //         if (task.key === tasks.editKey) {
-  //           return {
-  //             ...task,
-  //             ...input,
-  //           };
-  //         }
-  //         return task;
-  //       });
-  //     });
-  //     setInput((prevState) => {
-  //       return { ...prevState, title: "", description: "" };
-  //     });
-  //   }
-  // }
-
-  async function addTask(e) {
+  async function addTask(e, taskId) {
     e.preventDefault();
     try {
-      await axios.post(
-        "/api/v1/tasks",
-        { title: input.title, description: input.description },
-        {
-          withCredentials: true,
-          "Content-Type": "application/json",
-          headers: {
-            Authorization: "Bearer wlkhrjgtesjhdgiekjrbdgnkejrdsbgnkjmrwdsj",
-          },
-        }
-      );
-      alert("saved successfully");
+      if (!isEditing) {
+        const { data } = await axios.post(
+          "/api/v1/tasks",
+          { title: input.title, task: input.description },
+          {
+            withCredentials: true,
+            "Content-Type": "application/json",
+          }
+        );
+        alert("saved successfully");
+        setInput({ title: "", description: "" });
+        setTasks(data.tasks);
+      } else {
+        const { data } = await axios.patch(
+          `/api/v1/tasks/${taskId}`,
+          { title: input.title, task: input.description },
+          {
+            withCredentials: true,
+            "Content-Type": "application/json",
+          }
+        );
+        setTasks(data.tasks);
+        setInput({ title: "", description: "" });
+        alert("edited successfully");
+      }
+      setIsEditing(false);
+      // window.location.reload();
     } catch (err) {
       setModal(true);
       if (err.response.data.message === "jwt malformed") {
@@ -148,201 +132,123 @@ function Home() {
     }
   }
 
-  function handleCancelButton() {
-    if (screenSize <= 650) {
-      setIsNewTask(false);
-    }
-    if (tasks.editMode) {
-      dispatcher({ type: "SWITCH_BACK_FROM_EDIT_MODE" });
-      setInput((prevState) => {
-        return { ...prevState, title: "", description: "" };
-      });
-    } else {
-      setInput((prevState) => {
-        return { ...prevState, title: "", description: "" };
-      });
-    }
-  }
-
-  function deleteTask(key) {
-    dispatcher({ type: "DELETE_TASK", payload: key });
-    if (isSorting) {
-      setSortArray((prevArray) => {
-        return prevArray.filter((task) => {
-          return task.key !== key;
+  function startEditMode(id) {
+    tasks.forEach((task) => {
+      if (task._id === id) {
+        setInput({
+          title: task.title,
+          description: task.task,
+          taskId: task._id,
         });
-      });
-    }
-  }
-
-  function startEditMode(key) {
-    setIsNewTask(true);
-
-    setTimeout(() => {
-      tasks.userTasks.find((task) => {
-        if (task.key === key) {
-          setInput({ ...task });
-        }
-        return dispatcher({ type: "EDIT_MODE", payload: key });
-      });
+        openTaskInputField();
+        setIsEditing(true);
+      }
     });
-    setTimeout(() => {
-      descriptionRef.current.focus();
-    }, 50);
   }
 
-  function toggleComplete(key) {
-    setSortArray((prevTask) => {
-      return prevTask.map((task) => {
-        if (task.key === key) {
-          return {
-            ...task,
-            isComplete: true,
-            completedDate: date,
-          };
-        }
+  function cancelEditing() {
+    setIsNewTask(false);
+    setIsEditing(false);
+    setInput({ title: "", description: "", taskId: "" });
+  }
+
+  function getSortedByValue() {
+    setSortedBy(sortRef.current.value);
+  }
+
+  useEffect(() => {
+    if (tasks.length < 1) {
+      return setFilteredTasks([]);
+    }
+    if (sortedBy === "completed") {
+      const completedTasks = tasks.filter((task) => {
+        return task.isComplete;
+      });
+      setFilteredTasks(completedTasks);
+    } else if (sortedBy === "unCompleted") {
+      const uncompletedTasks = tasks.filter((task) => {
+        return !task.isComplete;
+      });
+      setFilteredTasks(uncompletedTasks);
+    } else if (sortedBy === "all") {
+      const allTasks = tasks.map((task) => {
         return task;
       });
-    });
-    dispatcher({ type: "TOGGLE_COMPLETE", payload: { key, date } });
-  }
-
-  useEffect(() => {
-    const data = localStorage.getItem("tasks");
-    if (data) {
-      dispatcher({ type: "LOAD_STORED_DATA", payload: JSON.parse(data) });
+      setFilteredTasks(allTasks);
+    } else {
+      return;
     }
-  }, []);
+  }, [sortedBy, tasks]);
 
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  });
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      dispatcher({ type: "RESET_MODAL" });
-    }, 3000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  });
-
-  useEffect(() => {
-    dispatcher({ type: "SWITCH_BACK_FROM_EDIT_MODE" });
-  }, []);
-
-  const dragStartRef = useRef();
-  const dragEnterRef = useRef();
-
-  function onDragStart(index) {
-    dragStartRef.current = index;
+  if (isLoading) {
+    return <p className="main"></p>;
   }
 
-  function onDragEnter(index) {
-    dragEnterRef.current = index;
+  if (!success) {
+    return window.location.assign("/");
   }
 
-  function onDragEnd() {
-    if (!isSorting) {
-      dispatcher({
-        type: "REARRANGE_TASKS",
-        payload: { dragStartRef, dragEnterRef },
-      });
-    }
-  }
-
-  function handleSortValueChange(e) {
-    dispatcher({ type: "SWITCH_BACK_FROM_EDIT_MODE" });
-    setInput({ title: "", description: "" });
-
-    if (e.target.value === "completed") {
-      setIsSorting(true);
-      setSortArray(() => {
-        return tasks.userTasks.filter((task) => {
-          return task.isComplete;
-        });
-      });
-    } else if (e.target.value === "unCompleted") {
-      setIsSorting(true);
-      setSortArray(() => {
-        return tasks.userTasks.filter((task) => {
-          return !task.isComplete;
-        });
-      });
-    } else if (e.target.value === "default") {
-      setSortArray([]);
-      setIsSorting(false);
-    }
-  }
+  // console.log(success);
 
   return (
     <>
-      {success ? (
-        <main className="main">
-          <section className="main--left">
-            <p className="main--left__date">Today: {date}</p>
-            <div className="main--left__addBtn" onClick={openTaskInputField}>
-              <p className={isDark ? "p--darkMode" : ""}>+</p>
-              <h3>Add New Task</h3>
-            </div>
-            {!tasks.editMode && isNewTask && (
-              <TaskInputField
+      {
+        success && (
+          <main className="main">
+            <section className="main--left">
+              <p className="main--left__date">Today: {date}</p>
+              <div className="main--left__addBtn" onClick={openTaskInputField}>
+                <p className={isDark ? "p--darkMode" : ""}>+</p>
+                <h3>Add New Task</h3>
+              </div>
+              {isNewTask && (
+                <TaskInputField
+                  input={input}
+                  handleOnChange={handleOnChange}
+                  descriptionRef
+                  handleCancelButton
+                  addTask={addTask}
+                  tasks={tasks}
+                  isEditing={isEditing}
+                  cancelEditing={cancelEditing}
+                />
+              )}
+            </section>
+            <section className="main--right">
+              <div className="main--right__sort">
+                <i className="fa-solid fa-sort"></i>
+                <p>Sorted by</p>
+                <select ref={sortRef} onChange={getSortedByValue}>
+                  <option>all</option>
+                  <option>completed</option>
+                  <option>unCompleted</option>
+                </select>
+              </div>
+              <Task
+                setTasks={setTasks}
+                filteredTasks={filteredTasks}
+                startEditMode={startEditMode}
+                toggleComplete
+                onDragStart
+                onDragEnter
+                onDragEnd
                 input={input}
                 handleOnChange={handleOnChange}
-                descriptionRef={descriptionRef}
-                handleCancelButton={handleCancelButton}
+                descriptionRef
+                handleCancelButton
                 addTask={addTask}
-                tasks={tasks}
+                sortArray
+                isSorting
+                isNewTask
+                sortedBy={sortedBy}
               />
-            )}
-          </section>
-          <section className="main--right">
-            <div className="main--right__sort">
-              <i className="fa-solid fa-sort"></i>
-              <p>Sorted by</p>
-              <select onChange={handleSortValueChange}>
-                <option>default</option>
-                <option>completed</option>
-                <option>unCompleted</option>
-              </select>
-            </div>
-            <Task
-              tasks={tasks}
-              deleteTask={deleteTask}
-              startEditMode={startEditMode}
-              toggleComplete={toggleComplete}
-              onDragStart={onDragStart}
-              onDragEnter={onDragEnter}
-              onDragEnd={onDragEnd}
-              input={input}
-              handleOnChange={handleOnChange}
-              descriptionRef={descriptionRef}
-              handleCancelButton={handleCancelButton}
-              addTask={addTask}
-              sortArray={sortArray}
-              isSorting={isSorting}
-              isNewTask={isNewTask}
-            />
-          </section>
-          {tasks.isModal && (
-            <p
-              style={{
-                backgroundColor: isDark ? "white" : "#281732",
-                color: isDark ? "green" : "white",
-              }}
-              className="modal__message"
-            >
-              {tasks.message}
-              <span>
-                <i className="fa-solid fa-circle-check"></i>
-              </span>
-            </p>
-          )}
-        </main>
-      ) : (
-        navigate("/", { replace: true })
-      )}
+            </section>
+          </main>
+        )
+        //  : (
+        //   document.location.assign("/")
+        // )
+      }
     </>
   );
 }

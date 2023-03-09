@@ -5,6 +5,10 @@
     align-items: center;
 }
 
+.fa-bars{
+    display: none;
+}
+
 .header{
     height: 10%;
     // border: 1px solid red;
@@ -22,11 +26,14 @@
         // border: 1px solid brown;
         margin-right: 2em;
         @include flex();
+
         gap: 1em;
 
         &__ul {
             font-weight: 500;
             font-size: 1.125rem;
+            @include flex();
+            gap: .5em;
         
             &__li {
                 list-style: none;
@@ -41,6 +48,14 @@
                     background-color: black;
                 }
             }
+
+            .logout{
+                border: 1px solid #0d0c14;
+                padding: .5em 1em;
+                border-radius: .2em;
+                font-weight: 600;
+                font-size: 1.125rem;
+            }
         }
         &__toggler {
             width: 50px;
@@ -50,6 +65,7 @@
             border: 2px solid black;
             border-radius: 100vmax;
             cursor: pointer;
+            margin-right: 1em;
 
             &::after{
                 content: "";
@@ -80,14 +96,53 @@
 }
 
 @media screen and (max-width: 650px){
+    .fa-bars{
+        display: initial;
+        // border: 1px solid red;
+    }
     .header{
+        position: relative;
 
         &--logo{
             margin-left: .5em;
         }
 
         &--right{
+            display: none;
+            // border: 1px solid red;
+            box-shadow: 0 0 5px 0 black;
             margin-right: .5em;
+            position: absolute;
+            flex-direction: column-reverse;
+            justify-content: center;
+            right: -.5em;
+            top: 10vh;
+            background-color: white;
+            // top: 20vh;
+            z-index: 100;
+            padding: 1em 2em;
+            height: 300px;
+            width: 200px;
+            &__ul{
+                // border: 1px solid red;
+              
+                flex-direction: column;
+                gap: 1em;
+                
+            }
+        }
+        .navbar {
+            // border: 1px solid red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: .5em;
+            margin-right: 1em;
+
+            .fa-bars{
+                color: black;
+                width: 2.5rem;
+            }
         }
     }
 }

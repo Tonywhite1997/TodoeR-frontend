@@ -14,7 +14,7 @@ function Login() {
   const { success, setSuccess } = useContext(successContext);
   const { setUser } = useContext(userContext);
   const { modal, setModal } = useContext(modalContext);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   function collectLoginData(e) {
     e.preventDefault();
@@ -28,12 +28,12 @@ function Login() {
   async function loginUser(e) {
     e.preventDefault();
     try {
-      const user = await axios.post("/api/v1/users/login", {
+      const { data } = await axios.post("/api/v1/users/login", {
         email: loginData.email,
         password: loginData.password,
       });
       setModal(false);
-      setUser(user.data);
+      setUser(data);
       setSuccess(true);
     } catch (err) {
       if (err.response.status === 500) {
@@ -44,11 +44,14 @@ function Login() {
       seterrorMsg(message);
     }
   }
+  let navigate = useNavigate();
   useEffect(() => {
     if (success) {
-      navigate("/Home");
+      navigate("/Home", { replace: true });
+    } else {
+      navigate("/", { replace: true });
     }
-  }, [success]);
+  }, [success, navigate]);
 
   return (
     <>
@@ -74,7 +77,10 @@ function Login() {
           Login
         </button>
         {modal && <Modal message={errorMsg} color={"red"} />}
-        <p>
+        <Link style={{ color: "white" }} to="/forgot-password">
+          forgot password
+        </Link>
+        <p style={{ marginTop: "-1.5em" }}>
           Don't have an account?{" "}
           <Link className="signupBtn" to="/Signup">
             sign up

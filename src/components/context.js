@@ -1,4 +1,10 @@
-import { createContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useEffect,
+  useState,
+  useContext,
+  useCallback,
+} from "react";
 import axios from "axios";
 
 export const DarkModeContext = createContext();
@@ -6,6 +12,7 @@ export const userContext = createContext();
 export const messageContext = createContext();
 export const modalContext = createContext();
 export const successContext = createContext();
+export const loadingContext = createContext();
 
 export function SuccessProvider({ children }) {
   const [success, setSuccess] = useState(false);
@@ -13,6 +20,15 @@ export function SuccessProvider({ children }) {
     <successContext.Provider value={{ success, setSuccess }}>
       {children}
     </successContext.Provider>
+  );
+}
+
+export function LoadingProvider({ children }) {
+  const [isLoading, setIsLoading] = useState(true);
+  return (
+    <loadingContext.Provider value={{ isLoading, setIsLoading }}>
+      {children}
+    </loadingContext.Provider>
   );
 }
 
@@ -35,22 +51,27 @@ export function MessageProvider({ children }) {
 }
 
 export function UserProvider({ children }) {
+  const { setSuccess } = useContext(successContext);
+  const { setIsLoading } = useContext(loadingContext);
   const [user, setUser] = useState(null);
-  async function persistLogin() {
+  const persistLogin = useCallback(async () => {
     try {
-      const user = await axios.get("/api/v1/users/profile", {
+      const { data } = await axios.get("/api/v1/users/profile", {
         withCredentials: true,
       });
-      setUser(user.data);
+      setUser(data);
+      setSuccess(true);
     } catch (err) {
-      console.log(err);
+      console.log(err.message);
     }
-  }
+    setIsLoading(false);
+  }, [setIsLoading, setSuccess]);
   useEffect(() => {
     if (!user) {
       persistLogin();
     }
-  }, []);
+  }, [user, persistLogin]);
+
   return (
     <userContext.Provider value={{ user, setUser }}>
       {children}

@@ -4,6 +4,7 @@ import { DarkModeContext } from "./context";
 
 function Contact() {
   const { isDark } = useContext(DarkModeContext);
+
   return (
     <>
       <main className="contact">

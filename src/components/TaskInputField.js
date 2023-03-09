@@ -5,21 +5,19 @@ import { useContext } from "react";
 function TaskInputField({
   input,
   handleOnChange,
-  descriptionRef,
-  handleCancelButton,
   addTask,
-  tasks,
-  inputFieldRef,
+  isEditing,
+  cancelEditing,
 }) {
   const { isDark } = useContext(DarkModeContext);
 
   return (
     <div
-      ref={inputFieldRef}
-      className="main--left--task__div"
-      style={{
-        paddingLeft: tasks.editMode ? "1em" : "0",
-      }}
+    // ref={inputFieldRef}
+    // className="main--left--task__div"
+    // style={{
+    //   paddingLeft: tasks.editMode ? "1em" : "0",
+    // }}
     >
       <div
         className={
@@ -36,7 +34,7 @@ function TaskInputField({
           onChange={handleOnChange}
         />
         <textarea
-          ref={descriptionRef}
+          // ref={descriptionRef}
           placeholder="Description"
           name="description"
           value={input.description}
@@ -50,7 +48,7 @@ function TaskInputField({
               ? "main--left--task__div__button__cancel darkMode"
               : "main--left--task__div__button__cancel"
           }
-          onClick={handleCancelButton}
+          onClick={cancelEditing}
         >
           Cancel
         </button>
@@ -60,9 +58,9 @@ function TaskInputField({
               ? "main--left--task__div__button__add darkMode"
               : "main--left--task__div__button__add"
           }
-          onClick={addTask}
+          onClick={(e) => addTask(e, input.taskId)}
         >
-          {tasks.editMode ? "Save edit" : "Add task"}
+          {isEditing ? "Save edit" : "Add task"}
         </button>
       </div>
     </div>

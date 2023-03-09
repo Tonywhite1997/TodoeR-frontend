@@ -1,0 +1,70 @@
+.my-page{
+    height: calc(100vh - 20%);
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 1em;
+    gap: .5em;
+
+    .name-div{
+        margin-bottom: 2em;
+
+        .name{
+            text-transform: capitalize;
+        }
+    }
+
+
+    .profile-nav{
+        display: flex;
+        gap: 2em;
+        margin-top: 2em;
+
+        .nav-link, button{
+            color: black;
+            font-weight: 500;
+            text-decoration: none;
+            padding: .2em 1em;
+            border-radius: 100vmax;
+            background-color: white;
+            box-shadow: 0 0 2px black;
+        }
+
+        button{
+            // font-weight: 500;
+            font-size: 1rem;
+        }
+    }
+
+    .profile-fields{
+        // width: 70%;
+        display: flex;
+        flex-direction: column;
+
+        .profile-field {
+            // width: 100%;
+            // border: 1px solid red;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: .5em;
+            gap: 3rem;
+            // border-bottom: 1px solid white;
+    
+            .field{
+                width: 30%;
+                // border: 1px solid red;
+                display: flex;
+                justify-content: flex-start;
+            }
+    
+            .value{
+                // border: 1px solid red;
+                width: 70%;
+                display: flex;
+                justify-content: flex-start;
+            }
+        }
+    }
+}

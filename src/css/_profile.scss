@@ -1,0 +1,23 @@
+.user-profile{
+    // border: 1px solid red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    gap: .2em;
+    cursor: pointer;
+    text-decoration: none;
+
+    img{
+        height: 50px;
+        width: 50px;
+        border: 1px solid black;
+        border-radius: 100%;
+        object-fit:cover;
+    }
+
+    .name{
+        color: black;
+        font-weight: 600;
+    }
+}

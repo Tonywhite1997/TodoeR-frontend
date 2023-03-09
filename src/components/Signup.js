@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { modalContext } from "./context";
+import { modalContext, successContext, userContext } from "./context";
 import Modal from "./Modal";
 
 function Signup() {
@@ -12,8 +12,10 @@ function Signup() {
     password: "",
     confirmPassword: "",
   });
-  const [signUpSuccess, setSignUpSuccess] = useState(false);
+
+  const { success, setSuccess } = useContext(successContext);
   const { modal, setModal } = useContext(modalContext);
+  const { setUser } = useContext(userContext);
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
   function getNewUserData(e) {
@@ -29,17 +31,16 @@ function Signup() {
     e.preventDefault();
     const { name, email, password, confirmPassword, age } = newUser;
     try {
-      // if (!name || !email || !password || !confirmPassword || age) {
-      //   return setErrorMsg("All fields are required");
-      // }
-      const res = await axios.post("/api/v1/users/signup", {
+      const { data } = await axios.post("/api/v1/users/signup", {
         name,
         email,
         age,
         password,
         confirmPassword,
       });
-      setSignUpSuccess(true);
+      console.log(data);
+      setUser(data);
+      setSuccess(true);
       setModal(false);
     } catch (err) {
       console.log(err);
@@ -53,10 +54,10 @@ function Signup() {
   }
 
   useEffect(() => {
-    if (signUpSuccess) {
-      navigate("/Home");
+    if (success) {
+      navigate("/");
     }
-  }, [signUpSuccess]);
+  }, [success, navigate]);
 
   return (
     <>

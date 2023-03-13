@@ -15,7 +15,8 @@ function ForgotPassword() {
       await axios.post("/api/v1/users/forgotPassword", { email: email });
       setIsSent(true);
       setErrMsg("");
-    } catch {
+    } catch (error) {
+      console.log(error);
       setErrMsg("Error. Try again later.");
       setIsSent(false);
     }

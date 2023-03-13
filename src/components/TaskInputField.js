@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DarkModeContext } from "./context";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 
 function TaskInputField({
   input,
@@ -8,8 +8,28 @@ function TaskInputField({
   addTask,
   isEditing,
   cancelEditing,
+  isNewTask,
 }) {
   const { isDark } = useContext(DarkModeContext);
+  const descriptionRef = useRef();
+
+  useEffect(() => {
+    const descriptionField = descriptionRef.current;
+    let timeout;
+    const onFocus = () => {
+      let descriptionLength = descriptionField.value.length;
+      descriptionField.setSelectionRange(descriptionLength, descriptionLength);
+      descriptionRef.current.focus();
+    };
+    if (isNewTask && isEditing) {
+      timeout = setTimeout(() => {
+        onFocus();
+      }, 100);
+    }
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [isNewTask, isEditing]);
 
   return (
     <div
@@ -34,7 +54,7 @@ function TaskInputField({
           onChange={handleOnChange}
         />
         <textarea
-          // ref={descriptionRef}
+          ref={descriptionRef}
           placeholder="Description"
           name="description"
           value={input.description}

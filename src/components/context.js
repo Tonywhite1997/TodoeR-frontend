@@ -10,7 +10,7 @@ import axios from "axios";
 export const DarkModeContext = createContext();
 export const userContext = createContext();
 export const messageContext = createContext();
-export const modalContext = createContext();
+export const isModalContext = createContext();
 export const successContext = createContext();
 export const loadingContext = createContext();
 
@@ -32,12 +32,15 @@ export function LoadingProvider({ children }) {
   );
 }
 
-export function ModalProvider({ children }) {
-  const [modal, setModal] = useState(false);
+export function IsModalProvider({ children }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [message, setMessage] = useState("");
   return (
-    <modalContext.Provider value={{ modal, setModal }}>
+    <isModalContext.Provider
+      value={{ isModalOpen, setIsModalOpen, message, setMessage }}
+    >
       {children}
-    </modalContext.Provider>
+    </isModalContext.Provider>
   );
 }
 

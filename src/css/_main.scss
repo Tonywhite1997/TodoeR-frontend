@@ -7,6 +7,8 @@
    height: 80%; 
    position: relative;
    @include flex(row);
+   overflow-y: scroll;
+//    border: 1px solid red;
 
    &--left{
     position: relative;
@@ -46,7 +48,6 @@
         }
     }
     &--task__div{
-        // border: 1px solid red;
         padding: 1em 0;
         padding-right: 1em;
         margin-right: 1em;
@@ -171,7 +172,7 @@
           border-bottom: 1px solid #acacac;
           @include flex(column);
           align-items: flex-start;
-          gap: .5em;
+          gap: 1em;
           padding: 0 1em;
           margin-top: 1em;
           padding-bottom: .5em;
@@ -180,6 +181,7 @@
             @include flex(row);
             gap: 1em;
             align-items: flex-start;
+            width: 88%;
           }
 
           h4{
@@ -265,6 +267,11 @@
 
                 &__task{
                     padding-left: .5em;
+
+                    p{
+                        margin-right: 3em;
+                        word-wrap: break-word;
+                    }
                 }
 
                 

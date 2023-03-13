@@ -1,0 +1,29 @@
+.modal{
+    width: 250px;
+    min-height: "50px";
+    background-color: lightGreen;
+    color: black;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    padding: 1em 1em;
+    border-radius: .3em;
+    text-align: center;
+    opacity: 1;
+    animation-name: fades-out;
+    animation-duration: 1s;
+    animation-delay: 2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fades-out{
+    0%{
+        opacity: 1;
+
+    }
+    100%{
+        opacity: 0;
+    }
+}

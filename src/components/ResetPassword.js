@@ -59,14 +59,6 @@ function ResetPassword() {
       }, 3000);
     }
   }, [success]);
-  //   useEffect(() => {
-  //     const timeOut = setTimeout(() => {
-  //       setErrorMsg("");
-  //     }, 3000);
-  //     return () => {
-  //       clearTimeout(timeOut);
-  //     };
-  //   }, [errorMsg]);
 
   if (invalid) {
     return (

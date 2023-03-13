@@ -5,7 +5,7 @@ import {
   MessageProvider,
   SuccessProvider,
   UserProvider,
-  ModalProvider,
+  IsModalProvider,
   LoadingProvider,
 } from "./components/context";
 import Header from "./components/Header";
@@ -33,13 +33,13 @@ export default function App() {
           <SuccessProvider>
             <UserProvider>
               <MessageProvider>
-                <ModalProvider>
+                <IsModalProvider>
                   <Header />
                   <Routes>
                     <Route exact path="/" element={<Login />} />
                     <Route path="/Contact" element={<Contact />} />
                     <Route path="/Home" element={<Home />} />
-                    <Route path="/Signup" element={<Signup />} />
+                    <Route path="/auth/sign-up" element={<Signup />} />
                     <Route path="/MyPage" element={<UserPage />} />
                     <Route path="/EditProfile" element={<EditProfile />} />
                     <Route path="/AllUsers" element={<AllUsers />} />
@@ -50,7 +50,7 @@ export default function App() {
                     <Route path="/reset-password" element={<ResetPassword />} />
                   </Routes>
                   <Footer />
-                </ModalProvider>
+                </IsModalProvider>
               </MessageProvider>
             </UserProvider>
           </SuccessProvider>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useContext, useRef } from "react";
 import { DarkModeContext, successContext, userContext } from "./context";
 import axios from "axios";
@@ -36,15 +36,16 @@ function Header() {
       : "";
   }, [isDark]);
 
+  const navigate = useNavigate();
+
   async function logout() {
     try {
       await axios.get("/api/v1/users/logout", {
         withCredentials: true,
       });
-      // closeNav();
       setSuccess(false);
       setUser(null);
-      window.location.assign("/");
+      navigate("/");
     } catch (err) {
       console.log(err);
     }
@@ -99,22 +100,16 @@ function Header() {
             </Link>
           )}
         </ul>
-        {/* <div
-          onClick={handleDarkMode}
-          className={
-            isDark ? "header--right__toggler dark" : "header--right__toggler"
-          }
-        ></div> */}
-        {user && <UserProfile />}
-      </div>
-
-      <div className="navbar">
         <div
           onClick={handleDarkMode}
           className={
             isDark ? "header--right__toggler dark" : "header--right__toggler"
           }
         ></div>
+      </div>
+
+      <div className="navbar">
+        {user && <UserProfile />}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

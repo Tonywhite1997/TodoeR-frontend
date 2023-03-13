@@ -1,8 +1,7 @@
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { modalContext, successContext, userContext } from "./context";
-import Modal from "./Modal";
+import { successContext, userContext } from "./context";
 
 function Signup() {
   const [newUser, setNewUser] = useState({
@@ -14,7 +13,6 @@ function Signup() {
   });
 
   const { success, setSuccess } = useContext(successContext);
-  const { modal, setModal } = useContext(modalContext);
   const { setUser } = useContext(userContext);
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
@@ -38,18 +36,20 @@ function Signup() {
         password,
         confirmPassword,
       });
-      console.log(data);
+      setErrorMsg("");
       setUser(data);
       setSuccess(true);
-      setModal(false);
     } catch (err) {
       console.log(err);
-      setModal(true);
-      if (err.response.status === 500) {
-        return setErrorMsg(err.response.statusText);
+      if (err.response.data.code === 11000) {
+        setErrorMsg("Email already used. Try another one");
+      } else if (newUser.password !== newUser.confirmPassword) {
+        setErrorMsg("Your passwords must match to continue");
+      } else if (newUser.age < 12) {
+        setErrorMsg("You must be 12 or older to continue");
+      } else {
+        setErrorMsg("Error. Try again later");
       }
-      const { message } = err.response.data;
-      setErrorMsg(message);
     }
   }
 
@@ -61,10 +61,10 @@ function Signup() {
 
   return (
     <>
-      <p className="signup-p">
-        Welcome to Todoer App, Please login or register to continue
-      </p>
       <form className="signup-form">
+        <p className="signup-p">
+          Welcome to Todoer App, Please login or register to continue
+        </p>
         <input
           type="text"
           placeholder="John Doe"
@@ -118,7 +118,7 @@ function Signup() {
         >
           Register
         </button>
-        {modal && <Modal message={errorMsg} />}
+        <p className="error-msg">{errorMsg}</p>
         <p>
           Have an acount?{" "}
           <Link className="signup-link" to="/">

@@ -1,13 +1,17 @@
+import { useContext } from "react";
 import axios from "axios";
+import { isModalContext } from "./context";
 
 function Task({ filteredTasks, startEditMode, setTasks }) {
+  const { setIsModalOpen, setMessage } = useContext(isModalContext);
   async function deleteTask(taskId) {
     try {
       const { data } = await axios.delete(`/api/v1/tasks/${taskId}`, {
         withCredentials: true,
       });
       setTasks(data.tasks);
-      alert("deleted successfully");
+      setMessage("Task deleted successfully");
+      setIsModalOpen(true);
     } catch (err) {
       console.log(err);
     }
@@ -24,7 +28,8 @@ function Task({ filteredTasks, startEditMode, setTasks }) {
         }
       );
       setTasks(data.tasks);
-      alert("marked successfully");
+      setMessage("Task completed!");
+      setIsModalOpen(true);
     } catch (err) {
       console.log(err);
     }

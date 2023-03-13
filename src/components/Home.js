@@ -5,22 +5,26 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Task from "./Task";
 import {
   DarkModeContext,
   successContext,
-  modalContext,
   userContext,
   loadingContext,
+  isModalContext,
 } from "./context";
 import TaskInputField from "./TaskInputField";
-import axios from "axios";
+import Modal from "../utils/modal/Modal";
 
 function Home() {
   const { isDark } = useContext(DarkModeContext);
   const { success, setSuccess } = useContext(successContext);
+  const { isModalOpen, setIsModalOpen, message, setMessage } =
+    useContext(isModalContext);
   const { user } = useContext(userContext);
-  const { setModal } = useContext(modalContext);
+  // const { setModal } = useContext(modalContext);
   const { isLoading } = useContext(loadingContext);
 
   const [input, setInput] = useState({
@@ -32,6 +36,7 @@ function Home() {
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [sortedBy, setSortedBy] = useState("all");
+  // const [message, setMessage] = useState("");
   const sortRef = useRef();
 
   const loadTasks = useCallback(async () => {
@@ -93,6 +98,7 @@ function Home() {
   let year = new Date().getFullYear();
   let date = `${day}/${month + 1}/${year}`;
 
+  // const inputRef = useRef();
   async function addTask(e, taskId) {
     e.preventDefault();
     try {
@@ -105,7 +111,8 @@ function Home() {
             "Content-Type": "application/json",
           }
         );
-        alert("saved successfully");
+        setMessage("New task created!");
+        setIsModalOpen(true);
         setInput({ title: "", description: "" });
         setTasks(data.tasks);
       } else {
@@ -119,12 +126,13 @@ function Home() {
         );
         setTasks(data.tasks);
         setInput({ title: "", description: "" });
-        alert("edited successfully");
+        setMessage("Task has been updated!");
+        setIsModalOpen(true);
       }
       setIsEditing(false);
       // window.location.reload();
     } catch (err) {
-      setModal(true);
+      // setModal(true);
       if (err.response.data.message === "jwt malformed") {
         setSuccess(false);
         // setMessage("Please login to continue");
@@ -141,10 +149,13 @@ function Home() {
           taskId: task._id,
         });
         openTaskInputField();
+        // inputRef.current.focus();
         setIsEditing(true);
       }
     });
   }
+
+  // console.log(inputRef.current);
 
   function cancelEditing() {
     setIsNewTask(false);
@@ -180,21 +191,38 @@ function Home() {
     }
   }, [sortedBy, tasks]);
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsModalOpen(false);
+    }, 3000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [isModalOpen, setIsModalOpen]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!success) {
+      // return window.location.assign("/");
+      navigate("/");
+    }
+  }, [success, navigate]);
+
   if (isLoading) {
     return <p className="main"></p>;
   }
-
-  if (!success) {
-    return window.location.assign("/");
-  }
-
-  // console.log(success);
 
   return (
     <>
       {
         success && (
           <main className="main">
+            {isModalOpen && (
+              <Modal>
+                <p>{message}</p>
+              </Modal>
+            )}
             <section className="main--left">
               <p className="main--left__date">Today: {date}</p>
               <div className="main--left__addBtn" onClick={openTaskInputField}>
@@ -211,6 +239,8 @@ function Home() {
                   tasks={tasks}
                   isEditing={isEditing}
                   cancelEditing={cancelEditing}
+                  isNewTask={isNewTask}
+                  // inputRef={inputRef}
                 />
               )}
             </section>
@@ -229,9 +259,6 @@ function Home() {
                 filteredTasks={filteredTasks}
                 startEditMode={startEditMode}
                 toggleComplete
-                onDragStart
-                onDragEnter
-                onDragEnd
                 input={input}
                 handleOnChange={handleOnChange}
                 descriptionRef
@@ -241,6 +268,7 @@ function Home() {
                 isSorting
                 isNewTask
                 sortedBy={sortedBy}
+                // inputRef={inputRef}
               />
             </section>
           </main>

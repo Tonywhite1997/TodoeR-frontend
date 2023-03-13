@@ -10,7 +10,7 @@
 }
 
 .header{
-    height: 10%;
+    min-height: 10%;
     // border: 1px solid red;
     background-color: #EBEBEB;
     @include flex();
@@ -26,7 +26,6 @@
         // border: 1px solid brown;
         margin-right: 2em;
         @include flex();
-
         gap: 1em;
 
         &__ul {
@@ -65,7 +64,6 @@
             border: 2px solid black;
             border-radius: 100vmax;
             cursor: pointer;
-            margin-right: 1em;
 
             &::after{
                 content: "";

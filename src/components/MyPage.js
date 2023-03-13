@@ -11,6 +11,7 @@ function UserPage() {
 
   const [password, setPassword] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
   const name = user?.user?.name;
   const email = user?.user?.email;
   const age = user?.user?.age;
@@ -23,10 +24,12 @@ function UserPage() {
     e.preventDefault();
     try {
       await axios.patch("/api/v1/users/deleteMe", { password });
-      alert("Deleted successfully");
       document.location.assign("/");
     } catch (err) {
       console.log(err);
+      if (err.response.status === 403) {
+        setErrMsg("incorrect password");
+      }
     }
   }
 
@@ -111,7 +114,7 @@ function UserPage() {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "1em",
+            gap: ".5em",
             marginTop: "2em",
             alignItems: "center",
           }}
@@ -130,8 +133,10 @@ function UserPage() {
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
+              setErrMsg("");
             }}
           />
+          <p style={{ color: "red" }}>{errMsg}</p>
           <div style={{ display: "flex", gap: "1em" }}>
             <button
               style={{ padding: ".3em 1em", borderRadius: "100vmax" }}

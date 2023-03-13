@@ -40,11 +40,11 @@ function EditProfile() {
       data.append("name", editInfo.name);
 
       await axios.patch("/api/v1/users/updateMe", data, {
-        withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+
       document.location.assign("/MyPage");
     } catch (err) {
       console.log(err);

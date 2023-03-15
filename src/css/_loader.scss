@@ -1,0 +1,14 @@
+.loader{
+    width: 100%;
+    text-align: center;
+    animation:loading 1s infinite;
+}
+
+@keyframes loading{
+    0%{
+        font-size: 1rem;
+    }
+    100%{
+        font-size: .8rem;
+    }
+}

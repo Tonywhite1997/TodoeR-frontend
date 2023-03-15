@@ -9,7 +9,6 @@
 
     .name-div{
         margin-bottom: 2em;
-
         .name{
             text-transform: capitalize;
         }
@@ -18,7 +17,7 @@
 
     .profile-nav{
         display: flex;
-        gap: 2em;
+        gap: 1em;
         margin-top: 2em;
 
         .nav-link, button{
@@ -38,29 +37,24 @@
     }
 
     .profile-fields{
-        // width: 70%;
+        width: 300px;
         display: flex;
         flex-direction: column;
 
         .profile-field {
-            // width: 100%;
-            // border: 1px solid red;
             display: flex;
             justify-content: flex-start;
             align-items: center;
             margin-bottom: .5em;
-            gap: 3rem;
-            // border-bottom: 1px solid white;
+            gap: .5em;
     
             .field{
                 width: 30%;
-                // border: 1px solid red;
                 display: flex;
                 justify-content: flex-start;
             }
     
             .value{
-                // border: 1px solid red;
                 width: 70%;
                 display: flex;
                 justify-content: flex-start;

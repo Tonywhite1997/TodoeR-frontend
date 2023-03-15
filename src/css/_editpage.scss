@@ -1,14 +1,15 @@
 .edit-page{
-    // border: 1px solid red;
     height: calc(100% - 20vh);
     display: flex;
     flex-direction: column;
-    gap: 2em;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 
+    p{
+        margin-top: 1em;
+    }
+
     .edit-form{
-        // border: 1px solid red;
         display: flex;
         flex-direction: column;
         gap: 1em;
@@ -18,13 +19,11 @@
         box-shadow: 0 0 2px white;
 
         label{
-            // border: 1px solid red;
             width: 100%;
             margin-bottom: -.8em;
         }
 
         input{
-            // border: 1px solid red;
             height: 40px;
             width: 300px;
             border-radius: .3em;
@@ -58,6 +57,20 @@
             font-weight: 600;
             border-radius: .2em;
             margin-top: .5em;
+        }
+    }
+}
+
+@media screen and (max-width:450px){
+    .edit-page{
+
+        .edit-form{
+            padding: 1em 1em;
+
+            input{
+                width: 250px;
+            }
+
         }
     }
 }

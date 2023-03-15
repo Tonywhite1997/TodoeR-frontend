@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { DarkModeContext } from "./context";
 import { useContext, useRef } from "react";
+import Loader from "../utils/Loader";
 
 function TaskInputField({
   input,
@@ -9,6 +10,8 @@ function TaskInputField({
   isEditing,
   cancelEditing,
   isNewTask,
+  isError,
+  isAdding,
 }) {
   const { isDark } = useContext(DarkModeContext);
   const descriptionRef = useRef();
@@ -32,13 +35,7 @@ function TaskInputField({
   }, [isNewTask, isEditing]);
 
   return (
-    <div
-    // ref={inputFieldRef}
-    // className="main--left--task__div"
-    // style={{
-    //   paddingLeft: tasks.editMode ? "1em" : "0",
-    // }}
-    >
+    <div>
       <div
         className={
           isDark
@@ -61,6 +58,18 @@ function TaskInputField({
           onChange={handleOnChange}
         />
       </div>
+      {isError && (
+        <p
+          style={{
+            color: "red",
+            textAlign: "right",
+            marginBottom: ".5em",
+            marginTop: "-.5em",
+          }}
+        >
+          Error, try again later.
+        </p>
+      )}
       <div className="main--left--task__div__button">
         <button
           className={
@@ -80,7 +89,9 @@ function TaskInputField({
           }
           onClick={(e) => addTask(e, input.taskId)}
         >
-          {isEditing ? "Save edit" : "Add task"}
+          {isEditing && !isAdding && "Edit task"}
+          {!isEditing && !isAdding && "Add task"}
+          {isAdding && <Loader text="saving..." />}
         </button>
       </div>
     </div>

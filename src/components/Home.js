@@ -17,10 +17,11 @@ import {
 } from "./context";
 import TaskInputField from "./TaskInputField";
 import Modal from "../utils/modal/Modal";
+import Loader from "../utils/Loader";
 
 function Home() {
   const { isDark } = useContext(DarkModeContext);
-  const { success, setSuccess } = useContext(successContext);
+  const { success } = useContext(successContext);
   const { isModalOpen, setIsModalOpen, message, setMessage } =
     useContext(isModalContext);
   const { user } = useContext(userContext);
@@ -36,16 +37,21 @@ function Home() {
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [sortedBy, setSortedBy] = useState("all");
-  // const [message, setMessage] = useState("");
+  const [isFetchingTask, setIsFetchingTask] = useState(false);
+  const [fetchingErr, setFetchingErr] = useState("");
+
   const sortRef = useRef();
 
   const loadTasks = useCallback(async () => {
+    setIsFetchingTask(true);
+    setFetchingErr("");
     try {
       const { data } = await axios.get(`/api/v1/tasks?user=${user.user._id}`);
       setTasks(data.data.tasks);
     } catch (err) {
-      console.log(err);
+      setFetchingErr("Error, check your internet and try again.");
     }
+    setIsFetchingTask(false);
   }, [user]);
 
   useEffect(() => {
@@ -56,6 +62,8 @@ function Home() {
 
   const [screenSize, setScreenSize] = useState(window.innerWidth);
   const [isNewTask, setIsNewTask] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
 
   function getScreenSize() {
     setScreenSize(window.innerWidth);
@@ -91,15 +99,13 @@ function Home() {
     });
   }
 
-  // const descriptionRef = useRef();
-
   let day = new Date().getDate();
   let month = new Date().getMonth();
   let year = new Date().getFullYear();
   let date = `${day}/${month + 1}/${year}`;
 
-  // const inputRef = useRef();
   async function addTask(e, taskId) {
+    setIsAdding(true);
     e.preventDefault();
     try {
       if (!isEditing) {
@@ -115,6 +121,7 @@ function Home() {
         setIsModalOpen(true);
         setInput({ title: "", description: "" });
         setTasks(data.tasks);
+        setIsError(false);
       } else {
         const { data } = await axios.patch(
           `/api/v1/tasks/${taskId}`,
@@ -124,20 +131,17 @@ function Home() {
             "Content-Type": "application/json",
           }
         );
+        setIsError(false);
         setTasks(data.tasks);
         setInput({ title: "", description: "" });
         setMessage("Task has been updated!");
         setIsModalOpen(true);
       }
       setIsEditing(false);
-      // window.location.reload();
     } catch (err) {
-      // setModal(true);
-      if (err.response.data.message === "jwt malformed") {
-        setSuccess(false);
-        // setMessage("Please login to continue");
-      }
+      setIsError(true);
     }
+    setIsAdding(false);
   }
 
   function startEditMode(id) {
@@ -202,15 +206,12 @@ function Home() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!success) {
-      // return window.location.assign("/");
-      navigate("/");
-    }
-  }, [success, navigate]);
-
   if (isLoading) {
     return <p className="main"></p>;
+  }
+
+  if (!success) {
+    return navigate("/");
   }
 
   return (
@@ -237,6 +238,8 @@ function Home() {
                   handleCancelButton
                   addTask={addTask}
                   tasks={tasks}
+                  isError={isError}
+                  isAdding={isAdding}
                   isEditing={isEditing}
                   cancelEditing={cancelEditing}
                   isNewTask={isNewTask}
@@ -254,22 +257,28 @@ function Home() {
                   <option>unCompleted</option>
                 </select>
               </div>
-              <Task
-                setTasks={setTasks}
-                filteredTasks={filteredTasks}
-                startEditMode={startEditMode}
-                toggleComplete
-                input={input}
-                handleOnChange={handleOnChange}
-                descriptionRef
-                handleCancelButton
-                addTask={addTask}
-                sortArray
-                isSorting
-                isNewTask
-                sortedBy={sortedBy}
-                // inputRef={inputRef}
-              />
+              {isFetchingTask && <Loader text="loading..." />}
+              {!isFetchingTask && fetchingErr && (
+                <p style={{ textAlign: "center" }}>{fetchingErr}</p>
+              )}
+              {!isFetchingTask && (
+                <Task
+                  setTasks={setTasks}
+                  filteredTasks={filteredTasks}
+                  startEditMode={startEditMode}
+                  toggleComplete
+                  input={input}
+                  handleOnChange={handleOnChange}
+                  descriptionRef
+                  handleCancelButton
+                  addTask={addTask}
+                  sortArray
+                  isSorting
+                  isNewTask
+                  sortedBy={sortedBy}
+                  // inputRef={inputRef}
+                />
+              )}
             </section>
           </main>
         )

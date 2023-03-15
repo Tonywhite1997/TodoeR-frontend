@@ -184,6 +184,8 @@
 .main--left {
   position: relative;
   padding-left: 2em;
+  padding-right: 1em;
+  padding-bottom: .5em;
   width: 50%;
   -webkit-box-shadow: 2px 0 2px 2px #dedede;
           box-shadow: 2px 0 2px 2px #dedede;
@@ -326,12 +328,14 @@
 }
 
 .main--left--task__div__button__add {
+  position: relative;
   background-color: #281732;
   color: white;
   border-radius: 5px;
   border: none;
   font-weight: 600;
   padding: .2em 1em;
+  width: 100px;
 }
 
 .main--left--task__div__button__add.darkMode {
@@ -536,6 +540,15 @@
 }
 
 .footer--logo {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   margin-left: 2em;
 }
 
@@ -670,12 +683,18 @@
     width: 350px;
   }
   .contact--section__div__name, .contact--section__div__email, .contact--section__div__textarea {
-    width: 330px;
+    width: 100%;
   }
   .contact--section p {
     text-align: center;
     font-size: 1em;
     margin-bottom: 1em;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .contact--section__div {
+    width: 250px;
   }
 }
 
@@ -719,14 +738,14 @@
 
 .form input {
   height: 2.5rem;
-  width: 20rem;
+  width: 18rem;
   border-radius: .5em;
   text-indent: 1em;
   font-size: 1.125rem;
 }
 
 .form button {
-  width: 20rem;
+  width: 18rem;
   height: 2.5rem;
   border-radius: 100vmax;
   font-size: 1.125rem;
@@ -772,14 +791,14 @@
 
 .signup-form input {
   height: 2.5rem;
-  width: 20rem;
+  width: 18rem;
   border-radius: .5em;
   text-indent: 1em;
   font-size: 1.125rem;
 }
 
 .signup-form button {
-  width: 20rem;
+  width: 18rem;
   height: 2.5rem;
   border-radius: 100vmax;
   font-size: 1.125rem;
@@ -857,7 +876,7 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  gap: 2em;
+  gap: 1em;
   margin-top: 2em;
 }
 
@@ -877,6 +896,7 @@
 }
 
 .my-page .profile-fields {
+  width: 300px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -897,7 +917,7 @@
       -ms-flex-align: center;
           align-items: center;
   margin-bottom: .5em;
-  gap: 3rem;
+  gap: .5em;
 }
 
 .my-page .profile-fields .profile-field .field {
@@ -929,13 +949,16 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  gap: 2em;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+}
+
+.edit-page p {
+  margin-top: 1em;
 }
 
 .edit-page .edit-form {
@@ -1006,6 +1029,15 @@
   font-weight: 600;
   border-radius: .2em;
   margin-top: .5em;
+}
+
+@media screen and (max-width: 450px) {
+  .edit-page .edit-form {
+    padding: 1em 1em;
+  }
+  .edit-page .edit-form input {
+    width: 250px;
+  }
 }
 
 .admin-search {
@@ -1183,6 +1215,31 @@
   }
   100% {
     opacity: 0;
+  }
+}
+
+.loader {
+  width: 100%;
+  text-align: center;
+  -webkit-animation: loading 1s infinite;
+          animation: loading 1s infinite;
+}
+
+@-webkit-keyframes loading {
+  0% {
+    font-size: 1rem;
+  }
+  100% {
+    font-size: .8rem;
+  }
+}
+
+@keyframes loading {
+  0% {
+    font-size: 1rem;
+  }
+  100% {
+    font-size: .8rem;
   }
 }
 

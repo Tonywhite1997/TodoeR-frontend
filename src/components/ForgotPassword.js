@@ -38,7 +38,7 @@ function ForgotPassword() {
           justifyContent: "center",
           alignItems: "center",
           border: "1px solid white",
-          padding: "5em 3em",
+          padding: "5em 1em",
         }}
         onSubmit={sendUserEmail}
       >

@@ -2,7 +2,7 @@ import { useState, useContext, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { successContext, userContext } from "./context";
-import Footer from "./Footer";
+import Loader from "../utils/Loader";
 
 function Login() {
   const [loginData, setLoginData] = useState({
@@ -11,6 +11,7 @@ function Login() {
   });
   const [message, setMessage] = useState("");
   const [iserror, setIsError] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
   const { success, setSuccess } = useContext(successContext);
   const { setUser } = useContext(userContext);
@@ -27,16 +28,18 @@ function Login() {
   }
 
   async function loginUser(e) {
+    setIsFetching(true);
     e.preventDefault();
     try {
       const { data } = await axios.post("/api/v1/users/login", {
         email: loginData.email.trim(),
         password: loginData.password.trim(),
       });
-
+      setIsFetching(false);
       setUser(data);
       setSuccess(true);
     } catch (err) {
+      setIsFetching(false);
       setIsError(true);
       if (err.response.status === 500) {
         return setMessage("An error occur. Please try again later");
@@ -108,8 +111,11 @@ function Login() {
             />
           </svg>
         </div>
-        <button onClick={(e) => loginUser(e)} className="loginBtn">
-          Login
+        <button
+          onClick={(e) => !isFetching && loginUser(e)}
+          className="loginBtn"
+        >
+          {isFetching ? <Loader text="loading..." /> : "Login"}
         </button>
         {iserror && message && <p style={{ color: "red" }}>{message}</p>}
         <Link style={{ color: "white" }} to="/forgot-password">

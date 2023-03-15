@@ -4,7 +4,7 @@ import {
   successContext,
   loadingContext,
 } from "./context";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 function EditProfile() {
@@ -14,10 +14,16 @@ function EditProfile() {
   const { isLoading } = useContext(loadingContext);
 
   const [editInfo, setEditInfo] = useState({
-    name: user?.user?.name,
-    age: user?.user?.age,
-    photo: null,
+    name: "",
+    age: "",
+    photo: "",
   });
+
+  useEffect(() => {
+    setEditInfo({ name: user?.user?.name, age: user?.user?.age, photo: null });
+  }, [user]);
+
+  const [preview, setPreview] = useState("");
 
   function getUpdatedUserInfo(e) {
     const { name } = e.target;
@@ -30,6 +36,18 @@ function EditProfile() {
       }
     });
   }
+
+  useEffect(() => {
+    if (!editInfo.photo) {
+      return setPreview("");
+    }
+    const blob = new Blob([editInfo.photo], { type: "image/jpeg" });
+    const objURL = URL.createObjectURL(blob);
+    setPreview(objURL);
+    return () => {
+      URL.revokeObjectURL(blob);
+    };
+  }, [editInfo.photo]);
 
   async function updateUserInfo(e) {
     e.preventDefault();
@@ -49,6 +67,7 @@ function EditProfile() {
     } catch (err) {
       console.log(err);
     }
+    setPreview(null);
   }
 
   if (isLoading) {
@@ -71,14 +90,14 @@ function EditProfile() {
         <input
           placeholder="name"
           name="name"
-          value={editInfo.name}
+          value={editInfo.name || ""}
           onChange={getUpdatedUserInfo}
         />
         <label>Your Age</label>
         <input
           placeholder="age"
           name="age"
-          value={editInfo.age}
+          value={editInfo.age || ""}
           onChange={getUpdatedUserInfo}
         />
         <label
@@ -112,6 +131,13 @@ function EditProfile() {
             />
           </svg>
         </label>
+        {preview && (
+          <img
+            src={preview}
+            alt="your selected file"
+            style={{ width: "50px", height: "50px", marginTop: ".5em" }}
+          />
+        )}
         <button>Update</button>
       </form>
     </div>

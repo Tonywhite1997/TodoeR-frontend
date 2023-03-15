@@ -6,6 +6,9 @@
     align-items: center;
 
     &--logo{
+        display: flex;
+        justify-content: center;
+        align-items: center;
         margin-left: 2em;
         img{
             width: 80px;

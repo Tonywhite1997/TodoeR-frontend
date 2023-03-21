@@ -74,7 +74,7 @@
 @media screen and (max-width: 650px){
     .contact--section{
         &__div{
-            width: 350px;
+            width: 400px;
 
             &__name,&__email, &__textarea{
                 width: 100%;
@@ -91,7 +91,7 @@
 @media screen and (max-width: 400px){
     .contact--section{
         &__div{
-            width: 250px;
+            width: 90%;
         }
     }
 }

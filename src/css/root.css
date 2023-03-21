@@ -680,7 +680,7 @@
 
 @media screen and (max-width: 650px) {
   .contact--section__div {
-    width: 350px;
+    width: 400px;
   }
   .contact--section__div__name, .contact--section__div__email, .contact--section__div__textarea {
     width: 100%;
@@ -694,7 +694,7 @@
 
 @media screen and (max-width: 400px) {
   .contact--section__div {
-    width: 250px;
+    width: 90%;
   }
 }
 

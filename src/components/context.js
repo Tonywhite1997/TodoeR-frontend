@@ -59,9 +59,7 @@ export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
   const persistLogin = useCallback(async () => {
     try {
-      const { data } = await axios.get("/api/v1/users/profile", {
-        withCredentials: true,
-      });
+      const { data } = await axios.get("/api/v1/users/profile");
       setUser(data);
       setSuccess(true);
     } catch (err) {
